@@ -1,6 +1,6 @@
 # Welcome to My Digital Universe 🚀
 
-![Space Energy Orb](https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif)
+<img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" style="height: 150px; object-fit: cover; object-position: center 30%;" />
 
 ## About Me
 
