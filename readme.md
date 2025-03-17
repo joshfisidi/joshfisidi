@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" style="height: 150px; object-fit: cover; object-position: center 20%;" />
+  <img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" height="150px" />
 </div>
 
 <div align="center">
@@ -8,7 +8,7 @@
     <tr>
       <td align="center">
         <details>
-          <summary><b>Frontend</b></summary>
+          <summary><b>▸ Frontend</b></summary>
           <p>
             <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" /></a>
             <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white" /></a>
@@ -20,7 +20,7 @@
       </td>
       <td align="center">
         <details>
-          <summary><b>Backend</b></summary>
+          <summary><b>▸ Backend</b></summary>
           <p>
             <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white" /></a>
             <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-000000?style=flat-square&logo=rust&logoColor=white" /></a>
@@ -31,7 +31,7 @@
       </td>
       <td align="center">
         <details>
-          <summary><b>Mobile</b></summary>
+          <summary><b>▸ Mobile</b></summary>
           <p>
             <a href="https://developer.apple.com/swift/"><img src="https://img.shields.io/badge/Swift-F05138?style=flat-square&logo=swift&logoColor=white" /></a>
             <a href="https://reactnative.dev/"><img src="https://img.shields.io/badge/React_Native-61DAFB?style=flat-square&logo=react&logoColor=black" /></a>
@@ -42,7 +42,7 @@
     <tr>
       <td align="center">
         <details>
-          <summary><b>Web3</b></summary>
+          <summary><b>▸ Web3</b></summary>
           <p>
             <a href="https://soliditylang.org/"><img src="https://img.shields.io/badge/Solidity-363636?style=flat-square&logo=solidity&logoColor=white" /></a>
             <a href="https://web3js.readthedocs.io/"><img src="https://img.shields.io/badge/Web3.js-F16822?style=flat-square&logo=web3.js&logoColor=white" /></a>
@@ -52,7 +52,7 @@
       </td>
       <td align="center">
         <details>
-          <summary><b>Database</b></summary>
+          <summary><b>▸ Database</b></summary>
           <p>
             <a href="https://supabase.com/"><img src="https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white" /></a>
             <a href="https://firebase.google.com/"><img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black" /></a>
@@ -62,7 +62,7 @@
       </td>
       <td align="center">
         <details>
-          <summary><b>Other</b></summary>
+          <summary><b>▸ Other</b></summary>
           <p>
             <a href="https://developer.chrome.com/docs/extensions/"><img src="https://img.shields.io/badge/Chrome_Extensions-4285F4?style=flat-square&logo=google-chrome&logoColor=white" /></a>
             <a href="https://unity.com/"><img src="https://img.shields.io/badge/Game_Development-ED1C24?style=flat-square&logo=unity&logoColor=white" /></a>
@@ -73,18 +73,18 @@
   </table>
 </div>
 
-<div>
+<div align="center">
   <h2>Current Projects</h2>
-  <ul>
-    <li><a href="https://github.com/joshfisidi/pijin">pijin</a></li>
-    <li><a href="https://github.com/joshfisidi/blirce">blirce</a></li>
-    <li><a href="https://github.com/joshfisidi/glyf">glyf</a></li>
-  </ul>
+  <p>
+    <a href="https://github.com/joshfisidi/pijin"><img src="https://img.shields.io/badge/pijin-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+    <a href="https://github.com/joshfisidi/blirce"><img src="https://img.shields.io/badge/blirce-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+    <a href="https://github.com/joshfisidi/glyf"><img src="https://img.shields.io/badge/glyf-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+  </p>
 </div>
 
-<div>
+<div align="center">
   <h2>Connect</h2>
-  <ul>
-    <li><a href="https://x.com/joshfisidi">@joshfisidi</a></li>
-  </ul>
+  <p>
+    <a href="https://x.com/joshfisidi"><img src="https://img.shields.io/badge/@joshfisidi-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
+  </p>
 </div>
