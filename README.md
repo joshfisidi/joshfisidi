@@ -1,4 +1,4 @@
-# Welcome to My Digital Universe 🚀
+# Welcome to My Digital Universe
 
 <div align="center">
   <img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" style="height: 150px; object-fit: cover; object-position: center 20%;" />
@@ -6,7 +6,7 @@
 
 ## About Me
 
-Full-stack developer with a passion for bringing digital experiences to life. My journey began in 2007, evolved through music and quantitative finance, and now I'm fully immersed in the world of development.
+Full-stack developer with a focus on TypeScript, Next.js, and modern web technologies. My journey began in 2007, evolved through music and quantitative finance, and now I'm fully immersed in development.
 
 <div>
   <h2>Tech Stack</h2>
@@ -21,31 +21,18 @@ Full-stack developer with a passion for bringing digital experiences to life. My
 </div>
 
 <div>
-  <h2>Current Focus</h2>
+  <h2>Current Projects</h2>
   <ul>
-    <li>🎮 Building immersive web-based games</li>
-    <li>🧩 Developing innovative Chrome extensions</li>
-    <li>🔗 Exploring the intersection of web2 and web3</li>
-    <li>🚀 Optimizing performance in complex applications</li>
+    <li>Web-based games and interactive experiences</li>
+    <li>Chrome extensions for productivity and automation</li>
+    <li>Web3 applications and blockchain integration</li>
+    <li>Performance optimization for complex applications</li>
   </ul>
 </div>
 
 <div>
-  <h2>Connect With Me</h2>
+  <h2>Connect</h2>
   <ul>
-    <li><a href="https://yourportfolio.com">Portfolio</a></li>
-    <li><a href="https://linkedin.com/in/yourusername">LinkedIn</a></li>
-    <li><a href="https://twitter.com/yourusername">Twitter</a></li>
+    <li><a href="https://x.com/joshfisidi">@joshfisidi</a></li>
   </ul>
-</div>
-
-<div>
-  <h2>Latest Projects</h2>
-  <p>Check out my pinned repositories below to see what I've been working on lately!</p>
-</div>
-
-<hr>
-
-<div align="center">
-  <i>"The best way to predict the future is to invent it." – Alan Kay</i>
 </div>
