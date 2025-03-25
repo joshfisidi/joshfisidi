@@ -48,6 +48,6 @@
 <a href="https://myanimelist.net"><img src="https://img.shields.io/badge/Anime-Enthusiast-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
 <p>
-<a href="https://github.com/joshfisidi"><img src="https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark" alt="GitHub Streak" /></a>
+<a href="https://github.com/joshfisidi"><img src="https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark&card_width=400" alt="GitHub Streak" width="400" /></a>
 </p>
 </div>
