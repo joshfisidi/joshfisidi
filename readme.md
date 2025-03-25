@@ -1,32 +1,60 @@
-<!-- Bitcoin & Crypto Stats Badge -->
-[![Bitcoin Price](https://img.shields.io/badge/dynamic/json?url=https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&label=BTC&query=$.bitcoin.usd&suffix=%20USD&color=F7931A&logo=bitcoin&logoColor=white&style=for-the-badge)](https://www.coingecko.com/en/coins/bitcoin)
+<div align="center"><img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" height="150px" />
+<table>
+<tr>
+<td align="center"><details><summary><b> Frontend</b></summary><p>
+<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" /></a>
+<a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white" /></a>
+<a href="https://nuxt.com/"><img src="https://img.shields.io/badge/Nuxt.js-00DC82?style=flat-square&logo=nuxt.js&logoColor=white" /></a>
+<a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black" /></a>
+<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/Vue-4FC08D?style=flat-square&logo=vue.js&logoColor=white" /></a>
+</p></details></td>
+<td align="center"><details><summary><b> Backend</b></summary><p>
+<a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white" /></a>
+<a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-000000?style=flat-square&logo=rust&logoColor=white" /></a>
+<a href="https://golang.org/"><img src="https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white" /></a>
+<a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white" /></a>
+</p></details></td>
+<td align="center"><details><summary><b> Mobile</b></summary><p>
+<a href="https://developer.apple.com/swift/"><img src="https://img.shields.io/badge/Swift-F05138?style=flat-square&logo=swift&logoColor=white" /></a>
+<a href="https://reactnative.dev/"><img src="https://img.shields.io/badge/React_Native-61DAFB?style=flat-square&logo=react&logoColor=black" /></a>
+</p></details></td>
+</tr>
+<tr>
+<td align="center"><details><summary><b> Web3</b></summary><p>
+<a href="https://soliditylang.org/"><img src="https://img.shields.io/badge/Solidity-363636?style=flat-square&logo=solidity&logoColor=white" /></a>
+<a href="https://web3js.readthedocs.io/"><img src="https://img.shields.io/badge/Web3.js-F16822?style=flat-square&logo=web3.js&logoColor=white" /></a>
+<a href="https://docs.ethers.org/"><img src="https://img.shields.io/badge/Ethers.js-3C3C3D?style=flat-square&logo=ethereum&logoColor=white" /></a>
+</p></details></td>
+<td align="center"><details><summary><b> Database</b></summary><p>
+<a href="https://supabase.com/"><img src="https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white" /></a>
+<a href="https://firebase.google.com/"><img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black" /></a>
+<a href="https://www.postgresql.org/"><img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" /></a>
+</p></details></td>
+<td align="center"><details><summary><b> Other</b></summary><p>
+<a href="https://developer.chrome.com/docs/extensions/"><img src="https://img.shields.io/badge/Chrome_Extensions-4285F4?style=flat-square&logo=google-chrome&logoColor=white" /></a>
+<a href="https://unity.com/"><img src="https://img.shields.io/badge/Game_Development-ED1C24?style=flat-square&logo=unity&logoColor=white" /></a>
+</p></details></td>
+</tr>
+</table>
+<p>
+<a href="https://github.com/joshfisidi/pijin"><img src="https://img.shields.io/badge/pijin-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+<a href="https://github.com/joshfisidi/blirce"><img src="https://img.shields.io/badge/blirce-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+<a href="https://github.com/joshfisidi/glyf"><img src="https://img.shields.io/badge/glyf-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+</p>
+<p>
+<a href="https://x.com/joshfisidi"><img src="https://img.shields.io/badge/@joshfisidi-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
+</p></div>
 
-<!-- GameMaker Trophy Badge -->
-[![GameMaker Developer](https://img.shields.io/badge/GameMaker-Developer-black?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDU3LjUyLDI1NS4zNUw0MTQsMTU1LjE4bC01NS4xNywxMDAuMTdaIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTk4LDI1NS4zNWw0My41Mi0xMDAuMTcsNTUuMTcsMTAwLjE3WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0yNTYsNTQuMzJ2MTUzLjdoLTcybDcyLDEzMS44NFYyMDEuMzhoNzJaIi8+PC9zdmc+)](https://www.yoyogames.com/gamemaker)
+[![committers.top badge](https://user-badge.committers.top/canada/joshfisidi.svg)](https://user-badge.committers.top/canada/joshfisidi)
 
-<!-- Anime Stats Badge -->
-[![MyAnimeList](https://img.shields.io/badge/dynamic/json?url=https://api.jikan.moe/v4/anime/5114&label=Anime%20Dev&suffix=%20Inspired&query=$.data.title&color=2E51A2&logo=myanimelist&logoColor=white&style=for-the-badge)](https://myanimelist.net/)
+[![Bitcoin Badge](https://img.shields.io/badge/Bitcoin-Developer-orange?style=for-the-badge&logo=bitcoin&logoColor=white)](https://bitcoin.org)
 
-<!-- GitHub Stats - Interactive -->
-[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=joshfisidi&show_icons=true&theme=radical)](https://github.com/joshfisidi)
+[![GameMaker Badge](https://img.shields.io/badge/GameMaker-Expert-black?style=for-the-badge&logo=gamemaker&logoColor=white)](https://www.yoyogames.com/gamemaker)
 
-<!-- GitHub Streak Stats - Interactive -->
+[![Anime Badge](https://img.shields.io/badge/Anime-Enthusiast-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white)](https://myanimelist.net)
+
+[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=joshfisidi&theme=dark&show_icons=true)](https://github.com/joshfisidi)
+
+[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=joshfisidi&layout=compact&theme=dark)](https://github.com/joshfisidi)
+
 [![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark)](https://github.com/joshfisidi)
-
-<!-- Wakatime Coding Stats - Interactive -->
-[![Wakatime Stats](https://github-readme-stats.vercel.app/api/wakatime?username=joshfisidi&layout=compact&theme=synthwave)](https://wakatime.com/@joshfisidi)
-
-<!-- LeetCode Stats - Interactive -->
-[![LeetCode Stats](https://leetcode-stats-six.vercel.app/api?username=joshfisidi&theme=dark)](https://leetcode.com/joshfisidi)
-
-<!-- Spotify Currently Playing - Interactive -->
-[![Spotify](https://spotify-github-profile.vercel.app/api/view?uid=joshfisidi&cover_image=true&theme=novatorem&bar_color=53b14f&bar_color_cover=false)](https://spotify-github-profile.vercel.app/api/view?uid=joshfisidi&redirect=true)
-
-<!-- 3D Contribution Calendar - Interactive -->
-[![3D Contribution Calendar](https://skyline.github.com/joshfisidi/2023)](https://skyline.github.com/joshfisidi/2023)
-
-<!-- Codewars Badge - Interactive -->
-[![Codewars](https://www.codewars.com/users/joshfisidi/badges/large)](https://www.codewars.com/users/joshfisidi)
-
-<!-- Developer Metrics - Interactive -->
-[![Metrics](https://metrics.lecoq.io/joshfisidi?template=classic&base.header=0&base.activity=0&base.community=0&base.repositories=0&base.metadata=0&achievements=1&achievements.threshold=C&achievements.secrets=true&achievements.display=detailed&achievements.limit=0&config.timezone=America%2FNew_York)](https://metrics.lecoq.io/joshfisidi)
