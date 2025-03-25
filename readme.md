@@ -44,3 +44,6 @@
 <p>
 <a href="https://x.com/joshfisidi"><img src="https://img.shields.io/badge/@joshfisidi-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
 </p></div>
+
+
+[![committers.top badge](https://user-badge.committers.top/canada/USERNAME.svg)](https://user-badge.committers.top/canada/joshfisidi)
