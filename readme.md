@@ -45,9 +45,10 @@
 <a href="https://x.com/joshfisidi"><img src="https://img.shields.io/badge/@joshfisidi-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
 </p>
 <p>
-<a href="https://myanimelist.net"><img src="https://img.shields.io/badge/Anime-List-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
+<a href="https://myanimelist.net"><img src="https://img.shields.io/badge/Anime-Enthusiast-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
-<p>
-<a href="https://github.com/joshfisidi"><img src="https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark" width="495" /></a>
-</p>
+
+<a href="https://github.com/joshfisidi">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark&hide_border=true&background=0D1117&stroke=0000&count_private=true&width=420&dates=0D1117" alt="GitHub Streak" width="65%" />
+</a>
 </div>
