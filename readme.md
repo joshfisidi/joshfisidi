@@ -1,45 +1,32 @@
-<div align="center">
-<table>
-<tr>
-<td align="center"><details><summary><b>Cryptocurrency</b></summary><p>
-<a href="https://bitcoin.org/"><img src="https://img.shields.io/badge/Bitcoin-F7931A?style=flat-square&logo=bitcoin&logoColor=white" /></a>
-<a href="https://ethereum.org/"><img src="https://img.shields.io/badge/Ethereum-3C3C3D?style=flat-square&logo=ethereum&logoColor=white" /></a>
-<a href="https://lightning.network/"><img src="https://img.shields.io/badge/Lightning_Network-792EE5?style=flat-square&logo=lightning&logoColor=white" /></a>
-</p></details></td>
-<td align="center"><details><summary><b>Game Development</b></summary><p>
-<a href="https://www.yoyogames.com/gamemaker"><img src="https://img.shields.io/badge/GameMaker-000000?style=flat-square&logo=gamemaker&logoColor=white" /></a>
-<a href="https://godotengine.org/"><img src="https://img.shields.io/badge/Godot-478CBF?style=flat-square&logo=godot-engine&logoColor=white" /></a>
-<a href="https://phaser.io/"><img src="https://img.shields.io/badge/Phaser-8AC149?style=flat-square&logo=phaser&logoColor=white" /></a>
-</p></details></td>
-<td align="center"><details><summary><b>Anime Tech</b></summary><p>
-<a href="https://threejs.org/"><img src="https://img.shields.io/badge/Three.js-000000?style=flat-square&logo=three.js&logoColor=white" /></a>
-<a href="https://www.blender.org/"><img src="https://img.shields.io/badge/Blender-F5792A?style=flat-square&logo=blender&logoColor=white" /></a>
-<a href="https://www.pixijs.com/"><img src="https://img.shields.io/badge/PixiJS-E91E63?style=flat-square&logo=pixijs&logoColor=white" /></a>
-</p></details></td>
-</tr>
-<tr>
-<td align="center"><details><summary><b>Programming</b></summary><p>
-<a href="https://www.haskell.org/"><img src="https://img.shields.io/badge/Haskell-5D4F85?style=flat-square&logo=haskell&logoColor=white" /></a>
-<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" /></a>
-<a href="https://www.ruby-lang.org/"><img src="https://img.shields.io/badge/Ruby-CC342D?style=flat-square&logo=ruby&logoColor=white" /></a>
-</p></details></td>
-<td align="center"><details><summary><b>DevOps</b></summary><p>
-<a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" /></a>
-<a href="https://kubernetes.io/"><img src="https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white" /></a>
-<a href="https://aws.amazon.com/"><img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white" /></a>
-</p></details></td>
-<td align="center"><details><summary><b>AI & ML</b></summary><p>
-<a href="https://www.tensorflow.org/"><img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=tensorflow&logoColor=white" /></a>
-<a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" /></a>
-<a href="https://huggingface.co/"><img src="https://img.shields.io/badge/Hugging_Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" /></a>
-</p></details></td>
-</tr>
-</table>
+<!-- Bitcoin & Crypto Stats Badge -->
+[![Bitcoin Price](https://img.shields.io/badge/dynamic/json?url=https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&label=BTC&query=$.bitcoin.usd&suffix=%20USD&color=F7931A&logo=bitcoin&logoColor=white&style=for-the-badge)](https://www.coingecko.com/en/coins/bitcoin)
 
-<!-- Additional badge-style links -->
-<p>
-<a href="https://bitcoin.org/"><img src="https://img.shields.io/badge/Bitcoin-F7931A?style=for-the-badge&logo=bitcoin&logoColor=white" /></a>
-<a href="https://www.yoyogames.com/gamemaker"><img src="https://img.shields.io/badge/GameMaker-000000?style=for-the-badge&logo=gamemaker&logoColor=white" /></a>
-<a href="https://myanimelist.net/"><img src="https://img.shields.io/badge/Anime_Dev-2E51A2?style=for-the-badge&logo=myanimelist&logoColor=white" /></a>
-</p>
-</div>
+<!-- GameMaker Trophy Badge -->
+[![GameMaker Developer](https://img.shields.io/badge/GameMaker-Developer-black?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNDU3LjUyLDI1NS4zNUw0MTQsMTU1LjE4bC01NS4xNywxMDAuMTdaIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTk4LDI1NS4zNWw0My41Mi0xMDAuMTcsNTUuMTcsMTAwLjE3WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0yNTYsNTQuMzJ2MTUzLjdoLTcybDcyLDEzMS44NFYyMDEuMzhoNzJaIi8+PC9zdmc+)](https://www.yoyogames.com/gamemaker)
+
+<!-- Anime Stats Badge -->
+[![MyAnimeList](https://img.shields.io/badge/dynamic/json?url=https://api.jikan.moe/v4/anime/5114&label=Anime%20Dev&suffix=%20Inspired&query=$.data.title&color=2E51A2&logo=myanimelist&logoColor=white&style=for-the-badge)](https://myanimelist.net/)
+
+<!-- GitHub Stats - Interactive -->
+[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=joshfisidi&show_icons=true&theme=radical)](https://github.com/joshfisidi)
+
+<!-- GitHub Streak Stats - Interactive -->
+[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark)](https://github.com/joshfisidi)
+
+<!-- Wakatime Coding Stats - Interactive -->
+[![Wakatime Stats](https://github-readme-stats.vercel.app/api/wakatime?username=joshfisidi&layout=compact&theme=synthwave)](https://wakatime.com/@joshfisidi)
+
+<!-- LeetCode Stats - Interactive -->
+[![LeetCode Stats](https://leetcode-stats-six.vercel.app/api?username=joshfisidi&theme=dark)](https://leetcode.com/joshfisidi)
+
+<!-- Spotify Currently Playing - Interactive -->
+[![Spotify](https://spotify-github-profile.vercel.app/api/view?uid=joshfisidi&cover_image=true&theme=novatorem&bar_color=53b14f&bar_color_cover=false)](https://spotify-github-profile.vercel.app/api/view?uid=joshfisidi&redirect=true)
+
+<!-- 3D Contribution Calendar - Interactive -->
+[![3D Contribution Calendar](https://skyline.github.com/joshfisidi/2023)](https://skyline.github.com/joshfisidi/2023)
+
+<!-- Codewars Badge - Interactive -->
+[![Codewars](https://www.codewars.com/users/joshfisidi/badges/large)](https://www.codewars.com/users/joshfisidi)
+
+<!-- Developer Metrics - Interactive -->
+[![Metrics](https://metrics.lecoq.io/joshfisidi?template=classic&base.header=0&base.activity=0&base.community=0&base.repositories=0&base.metadata=0&achievements=1&achievements.threshold=C&achievements.secrets=true&achievements.display=detailed&achievements.limit=0&config.timezone=America%2FNew_York)](https://metrics.lecoq.io/joshfisidi)
