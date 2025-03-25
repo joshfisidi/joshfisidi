@@ -49,12 +49,6 @@
 
 [![Bitcoin Badge](https://img.shields.io/badge/Bitcoin-Developer-orange?style=for-the-badge&logo=bitcoin&logoColor=white)](https://bitcoin.org)
 
-[![GameMaker Badge](https://img.shields.io/badge/GameMaker-Expert-black?style=for-the-badge&logo=gamemaker&logoColor=white)](https://www.yoyogames.com/gamemaker)
-
 [![Anime Badge](https://img.shields.io/badge/Anime-Enthusiast-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white)](https://myanimelist.net)
-
-[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=joshfisidi&theme=dark&show_icons=true)](https://github.com/joshfisidi)
-
-[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=joshfisidi&layout=compact&theme=dark)](https://github.com/joshfisidi)
 
 [![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark)](https://github.com/joshfisidi)
