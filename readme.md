@@ -1,4 +1,4 @@
-<div align="center"><img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="10%" height="150px" />
+<div align="center"><img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" height="40px" />
 
 [![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark)](https://github.com/joshfisidi)
 <table>
