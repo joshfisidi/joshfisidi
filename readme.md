@@ -1,4 +1,5 @@
 <div align="center"><img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" height="150px" />
+[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark)](https://github.com/joshfisidi)
 <table>
 <tr>
 <td align="center"><details><summary><b> Frontend</b></summary><p>
@@ -47,6 +48,4 @@
 <p>
 <a href="https://myanimelist.net"><img src="https://img.shields.io/badge/Anime-Enthusiast-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
-
-[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark&ring=FF0000&fire=FF0000&currStreakLabel=FF0000)](https://github.com/joshfisidi)
 </div>
