@@ -1,49 +1,45 @@
-<div align="center"><img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" height="150px" />
+<div align="center">
 <table>
 <tr>
-<td align="center"><details><summary><b> Frontend</b></summary><p>
-<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" /></a>
-<a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white" /></a>
-<a href="https://nuxt.com/"><img src="https://img.shields.io/badge/Nuxt.js-00DC82?style=flat-square&logo=nuxt.js&logoColor=white" /></a>
-<a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black" /></a>
-<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/Vue-4FC08D?style=flat-square&logo=vue.js&logoColor=white" /></a>
+<td align="center"><details><summary><b>Cryptocurrency</b></summary><p>
+<a href="https://bitcoin.org/"><img src="https://img.shields.io/badge/Bitcoin-F7931A?style=flat-square&logo=bitcoin&logoColor=white" /></a>
+<a href="https://ethereum.org/"><img src="https://img.shields.io/badge/Ethereum-3C3C3D?style=flat-square&logo=ethereum&logoColor=white" /></a>
+<a href="https://lightning.network/"><img src="https://img.shields.io/badge/Lightning_Network-792EE5?style=flat-square&logo=lightning&logoColor=white" /></a>
 </p></details></td>
-<td align="center"><details><summary><b> Backend</b></summary><p>
-<a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white" /></a>
-<a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-000000?style=flat-square&logo=rust&logoColor=white" /></a>
-<a href="https://golang.org/"><img src="https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white" /></a>
-<a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white" /></a>
+<td align="center"><details><summary><b>Game Development</b></summary><p>
+<a href="https://www.yoyogames.com/gamemaker"><img src="https://img.shields.io/badge/GameMaker-000000?style=flat-square&logo=gamemaker&logoColor=white" /></a>
+<a href="https://godotengine.org/"><img src="https://img.shields.io/badge/Godot-478CBF?style=flat-square&logo=godot-engine&logoColor=white" /></a>
+<a href="https://phaser.io/"><img src="https://img.shields.io/badge/Phaser-8AC149?style=flat-square&logo=phaser&logoColor=white" /></a>
 </p></details></td>
-<td align="center"><details><summary><b> Mobile</b></summary><p>
-<a href="https://developer.apple.com/swift/"><img src="https://img.shields.io/badge/Swift-F05138?style=flat-square&logo=swift&logoColor=white" /></a>
-<a href="https://reactnative.dev/"><img src="https://img.shields.io/badge/React_Native-61DAFB?style=flat-square&logo=react&logoColor=black" /></a>
+<td align="center"><details><summary><b>Anime Tech</b></summary><p>
+<a href="https://threejs.org/"><img src="https://img.shields.io/badge/Three.js-000000?style=flat-square&logo=three.js&logoColor=white" /></a>
+<a href="https://www.blender.org/"><img src="https://img.shields.io/badge/Blender-F5792A?style=flat-square&logo=blender&logoColor=white" /></a>
+<a href="https://www.pixijs.com/"><img src="https://img.shields.io/badge/PixiJS-E91E63?style=flat-square&logo=pixijs&logoColor=white" /></a>
 </p></details></td>
 </tr>
 <tr>
-<td align="center"><details><summary><b> Web3</b></summary><p>
-<a href="https://soliditylang.org/"><img src="https://img.shields.io/badge/Solidity-363636?style=flat-square&logo=solidity&logoColor=white" /></a>
-<a href="https://web3js.readthedocs.io/"><img src="https://img.shields.io/badge/Web3.js-F16822?style=flat-square&logo=web3.js&logoColor=white" /></a>
-<a href="https://docs.ethers.org/"><img src="https://img.shields.io/badge/Ethers.js-3C3C3D?style=flat-square&logo=ethereum&logoColor=white" /></a>
+<td align="center"><details><summary><b>Programming</b></summary><p>
+<a href="https://www.haskell.org/"><img src="https://img.shields.io/badge/Haskell-5D4F85?style=flat-square&logo=haskell&logoColor=white" /></a>
+<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" /></a>
+<a href="https://www.ruby-lang.org/"><img src="https://img.shields.io/badge/Ruby-CC342D?style=flat-square&logo=ruby&logoColor=white" /></a>
 </p></details></td>
-<td align="center"><details><summary><b> Database</b></summary><p>
-<a href="https://supabase.com/"><img src="https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white" /></a>
-<a href="https://firebase.google.com/"><img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black" /></a>
-<a href="https://www.postgresql.org/"><img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" /></a>
+<td align="center"><details><summary><b>DevOps</b></summary><p>
+<a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" /></a>
+<a href="https://kubernetes.io/"><img src="https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white" /></a>
+<a href="https://aws.amazon.com/"><img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white" /></a>
 </p></details></td>
-<td align="center"><details><summary><b> Other</b></summary><p>
-<a href="https://developer.chrome.com/docs/extensions/"><img src="https://img.shields.io/badge/Chrome_Extensions-4285F4?style=flat-square&logo=google-chrome&logoColor=white" /></a>
-<a href="https://unity.com/"><img src="https://img.shields.io/badge/Game_Development-ED1C24?style=flat-square&logo=unity&logoColor=white" /></a>
+<td align="center"><details><summary><b>AI & ML</b></summary><p>
+<a href="https://www.tensorflow.org/"><img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=tensorflow&logoColor=white" /></a>
+<a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" /></a>
+<a href="https://huggingface.co/"><img src="https://img.shields.io/badge/Hugging_Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" /></a>
 </p></details></td>
 </tr>
 </table>
+
+<!-- Additional badge-style links -->
 <p>
-<a href="https://github.com/joshfisidi/pijin"><img src="https://img.shields.io/badge/pijin-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
-<a href="https://github.com/joshfisidi/blirce"><img src="https://img.shields.io/badge/blirce-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
-<a href="https://github.com/joshfisidi/glyf"><img src="https://img.shields.io/badge/glyf-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+<a href="https://bitcoin.org/"><img src="https://img.shields.io/badge/Bitcoin-F7931A?style=for-the-badge&logo=bitcoin&logoColor=white" /></a>
+<a href="https://www.yoyogames.com/gamemaker"><img src="https://img.shields.io/badge/GameMaker-000000?style=for-the-badge&logo=gamemaker&logoColor=white" /></a>
+<a href="https://myanimelist.net/"><img src="https://img.shields.io/badge/Anime_Dev-2E51A2?style=for-the-badge&logo=myanimelist&logoColor=white" /></a>
 </p>
-<p>
-<a href="https://x.com/joshfisidi"><img src="https://img.shields.io/badge/@joshfisidi-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
-</p></div>
-
-
-[![committers.top badge](https://user-badge.committers.top/canada/USERNAME.svg)](https://user-badge.committers.top/canada/joshfisidi)
+</div>
