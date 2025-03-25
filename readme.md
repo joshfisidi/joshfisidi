@@ -45,10 +45,6 @@
 <a href="https://x.com/joshfisidi"><img src="https://img.shields.io/badge/@joshfisidi-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
 </p></div>
 
-[![committers.top badge](https://user-badge.committers.top/canada/joshfisidi.svg)](https://user-badge.committers.top/canada/joshfisidi)
-
-[![Bitcoin Badge](https://img.shields.io/badge/Bitcoin-Developer-orange?style=for-the-badge&logo=bitcoin&logoColor=white)](https://bitcoin.org)
-
 [![Anime Badge](https://img.shields.io/badge/Anime-Enthusiast-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white)](https://myanimelist.net)
 
 [![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark)](https://github.com/joshfisidi)
