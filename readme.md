@@ -47,6 +47,6 @@
 <a href="https://x.com/joshfisidi"><img src="https://img.shields.io/badge/@joshfisidi-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
 </p>
 <p>
-<a href="https://myanimelist.net"><img src="https://img.shields.io/badge/Anime-Enthusiast-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
+<a href="https://myanimelist.net/profile/joshfisidi"><img src="https://img.shields.io/badge/Anime-List-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
 </div>
