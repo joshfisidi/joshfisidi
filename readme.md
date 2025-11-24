@@ -50,10 +50,10 @@
 <a href="https://myanimelist.net/profile/fisidi"><img src="https://img.shields.io/badge/Anime-List-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
 <p align="center">
-  <a href="https://soundcloud.com/joshfisidi/change-of-climate-prod-sevn-thomas"
+  <a href="https://soundcloud.com/joshfisidi/the-most"
      target="_blank"
      rel="noopener noreferrer">
-    <img src="https://img.shields.io/badge/SoundCloud-FF5500?style=for-the-badge&logo=soundcloud&logoColor=white" />
+    <img src="https://img.shields.io/badge/SoundCloud-555555?style=for-the-badge&logo=soundcloud&logoColor=white" />
   </a>
 </p>
 </div>
