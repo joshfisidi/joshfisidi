@@ -64,6 +64,6 @@
   </div>
   <div align="right">
   <a href="https://www.keybr.com/profile/z4tv0x8" target="_blank">
-    <img src="https://img.shields.io/badge/WPM-128-555555?style=flat&logo=keyboard&logoColor=white" />
+    <img src="https://img.shields.io/badge/WPM-555555?style=flat&logo=keyboard&logoColor=white" />
   </a>
 </div>
