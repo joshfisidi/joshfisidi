@@ -49,11 +49,32 @@
 <p>
 <a href="https://myanimelist.net/profile/fisidi"><img src="https://img.shields.io/badge/Anime-List-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
-<p align="center">
-  <a href="https://soundcloud.com/joshfisidi/the-most"
-     target="_blank"
-     rel="noopener noreferrer">
-    <img src="https://img.shields.io/badge/SoundCloud-303030?style=for-the-badge&logo=soundcloud&logoColor=white" />
-  </a>
-</p>
+<div x-data="{ open: false }" class="mt-3">
+  
+  <!-- The white text trigger -->
+  <button 
+    @click="open = !open" 
+    class="text-white text-sm underline underline-offset-4 hover:text-gray-300 transition">
+    More ▾
+  </button>
+
+  <!-- Smooth dropdown -->
+  <div 
+    x-show="open"
+    x-collapse
+    class="mt-2"
+  >
+    <div class="rounded-md overflow-hidden border border-gray-700">
+      <iframe
+        width="100%"
+        height="80"
+        scrolling="no"
+        frameborder="no"
+        allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/joshfisidi/change-of-climate-prod-sevn-thomas&color=%23ffffff&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+      ></iframe>
+    </div>
+  </div>
+
+</div>
 </div>
