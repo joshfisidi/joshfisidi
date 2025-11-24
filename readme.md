@@ -53,7 +53,7 @@
   <a href="https://soundcloud.com/joshfisidi/the-most"
      target="_blank"
      rel="noopener noreferrer">
-    <img src="https://img.shields.io/badge/SoundCloud-555555?style=for-the-badge&logo=soundcloud&logoColor=white" />
+    <img src="https://img.shields.io/badge/SoundCloud-303030?style=for-the-badge&logo=soundcloud&logoColor=white" />
   </a>
 </p>
 </div>
