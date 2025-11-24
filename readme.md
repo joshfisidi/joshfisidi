@@ -49,4 +49,10 @@
 <p>
 <a href="https://myanimelist.net/profile/fisidi"><img src="https://img.shields.io/badge/Anime-List-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
+<a
+  href="https://soundcloud.com/joshfisidi/change-of-climate-prod-sevn-thomas"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="inline-flex items-center px-4 py-2 rounded-lg border border-gray-400 hover:border-orange-500 hover:bg-orange-500 hover:text-white text-sm font-medium transition"
+</a>
 </div>
