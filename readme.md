@@ -50,21 +50,15 @@
 <a href="https://myanimelist.net/profile/fisidi"><img src="https://img.shields.io/badge/Anime-List-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
 <details>
-  <summary align="center" style="cursor: pointer;">
-    <strong>More ▾</strong>
-  </summary>
+  <summary><strong>More ▾</strong></summary>
 
   <br />
 
   <p align="center">
-    <iframe
-      width="100%"
-      height="80"
-      scrolling="no"
-      frameborder="no"
-      allow="autoplay"
-      src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/joshfisidi/the-most&color=%23555555&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-    ></iframe>
+    <a href="https://soundcloud.com/joshfisidi/the-most" target="_blank">
+      <img src="https://img.shields.io/badge/SoundCloud-555555?style=for-the-badge&logo=soundcloud&logoColor=white" />
+    </a>
   </p>
+
 </details>
   </div>
