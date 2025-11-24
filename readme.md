@@ -75,6 +75,3 @@
       ></iframe>
     </div>
   </div>
-
-</div>
-</div>
