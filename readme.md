@@ -50,13 +50,13 @@
 <a href="https://myanimelist.net/profile/fisidi"><img src="https://img.shields.io/badge/Anime-List-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
 <details>
-  <summary><strong>More ▾</strong></summary>
+  <summary><strong>▽</strong></summary>
 
   <br />
 
   <p align="center">
     <a href="https://soundcloud.com/joshfisidi/the-most" target="_blank">
-      <img src="https://img.shields.io/badge/SoundCloud-555555?style=for-the-badge&logo=soundcloud&logoColor=white" />
+      <img src="https://img.shields.io/badge/SoundCloud-555555?style=flat&logo=soundcloud&logoColor=white" />
     </a>
   </p>
 
