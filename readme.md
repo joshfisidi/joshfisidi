@@ -50,7 +50,7 @@
 <a href="https://myanimelist.net/profile/fisidi"><img src="https://img.shields.io/badge/Anime-List-2E51A2?style=for-the-badge&logo=crunchyroll&logoColor=white" /></a>
 </p>
 <details>
-  <summary><strong>▽</strong></summary>
+  <summary><strong></strong></summary>
 
   <br />
 
