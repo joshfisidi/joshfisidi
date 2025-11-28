@@ -1,4 +1,4 @@
-<div> [![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark)](https://github.com/joshfisidi)
+<div [![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark)](https://github.com/joshfisidi)
 <table>
 <tr>
 <td align="center"><details><summary><b> Frontend</b></summary><p>
