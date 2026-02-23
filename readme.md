@@ -68,3 +68,20 @@
     <img src="https://img.shields.io/badge/WPM-555555?style=flat&logo=keyboard&logoColor=white" />
   </a>
 </div>
+
+<div class="pulse"></div>
+
+<style>
+.pulse {
+  width: 50px;
+  height: 50px;
+  background: red;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+</style>
