@@ -1,4 +1,3 @@
-<div align="center"><img src="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/IMAGES//space-energy-orb-fisidi.gif" alt="Space Energy Orb" width="100%" height="150px" />
 <p align="center">
   <img src="https://readme-typing-svg.herokuapp.com/?lines=fisidi&center=true&width=400&height=50&color=FFFFFF&vCenter=true&pause=2000&speed=40" />
 </p>
