@@ -1,7 +1,7 @@
 <div align="center">
 
 <p>
-  <img src="https://readme-typing-svg.herokuapp.com/?lines=We+Are+All+Eternal;Energy+Structured+Becomes+Alive;No+Beliefs+Without+Action;Innovation+Is+Synthesis;Build+Civilization+Scale+Leverage;Agentic+Engineers+Create+Reality;Redundant+Actions+Compound+Power;Hope+Is+Passive+Execution+Is+Sacred;Fractal+Forward+No+Cure+Must+Fractal;Code+Build+Scale+Repeat;We+Do+Not+Wait+We+Construct;Intellect+Balanced+With+Strength;25K+Years+Of+Tech+In+25+Years;Faith+Requires+Execution;Design+Systems+That+Outlive+You;Compound+Relentlessly;Sovereign+Infrastructure+Only;From+Temple+To+Terminal;Engineer+The+Future;Fisidi+Moves+Silently&center=true&width=900&height=60&color=FFFFFF&vCenter=true&pause=1500&speed=40" />
+  <img src="https://readme-typing-svg.herokuapp.com/?lines=1000+Years+Compressed+Into+100;Ascend+The+Kardashev+Scale;Agentic+Engineers+Orchestrate+Reality;Intentional+Redundancy+Shapes+Destiny;Hope+Is+Passive+Truth;Reality+Is+Computable;Code+Was+Discovered+Not+Invented;Build+Blindly+Until+You+See;Systems+Over+Sentiment;Sovereignty+Through+Computation;Fisidi&center=true&width=900&height=60&color=FFFFFF&vCenter=true&pause=1500&speed=40" />
 </p>
 
 <p>
