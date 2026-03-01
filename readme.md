@@ -54,8 +54,31 @@
 
 <tr>
 <td align="center"><details><summary><b>AI & Agents</b></summary><p>
-<a href="https://openai.com/research/codex"><img src="https://img.shields.io/badge/Codex-121212?style=flat-square&logo=openai&logoColor=white" /></a>
-<a href="https://www.anthropic.com/"><img src="https://img.shields.io/badge/Claude-000000?style=flat-square&logo=anthropic&logoColor=white" /></a>
+
+<a href="https://openai.com/research/codex">
+<img src="https://img.shields.io/badge/Codex-121212?style=flat-square&logo=openai&logoColor=white" />
+</a>
+
+<a href="https://www.anthropic.com/">
+<img src="https://img.shields.io/badge/Claude-000000?style=flat-square&logo=anthropic&logoColor=white" />
+</a>
+
+<a href="https://x.ai/">
+<img src="https://img.shields.io/badge/Grok-000000?style=flat-square&logo=x&logoColor=white" />
+</a>
+
+<a href="https://ai.google.dev/">
+<img src="https://img.shields.io/badge/Gemini-4285F4?style=flat-square&logo=google&logoColor=white" />
+</a>
+
+<a href="https://www.deepseek.com/">
+<img src="https://img.shields.io/badge/DeepSeek-0A0A0A?style=flat-square&logo=deepseek&logoColor=white" />
+</a>
+
+<a href="https://deephat.ai/">
+<img src="https://img.shields.io/badge/DeepHat.ai-111111?style=flat-square&logo=brain&logoColor=white" />
+</a>
+
 </p></details></td>
 
 <td align="center"><details><summary><b>System & CLI</b></summary><p>
