@@ -1,12 +1,12 @@
 <div align="center">
 
 <p>
-  <img src="https://readme-typing-svg.herokuapp.com/?lines=1000+Years+Compressed+Into+100;Ascend+The+Kardashev+Scale;Agentic+Engineers+Orchestrate+Reality;Intentional+Redundancy+Shapes+Destiny;Hope+Is+Passive+Truth;Reality+Is+Computable;Code+Was+Discovered+Not+Invented;Build+Blindly+Until+You+See;Systems+Over+Sentiment;Sovereignty+Through+Computation;Fisidi&center=true&width=900&height=60&color=FFFFFF&vCenter=true&pause=1500&speed=40" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=14&pause=1500&color=FFFFFF&center=true&vCenter=true&width=900&height=60&lines=1000+Years+Compressed+Into+100;Ascend+The+Kardashev+Scale;Agentic+Engineers+Orchestrate+Reality;Intentional+Redundancy+Shapes+Destiny;Hope+Is+Passive+Truth;Reality+Is+Computable;Code+Was+Discovered+Not+Invented;Build+Blindly+Until+You+See;Systems+Over+Sentiment;Sovereignty+Through+Computation;Fisidi" />
 </p>
 
 <p>
   <a href="https://github.com/joshfisidi">
-    <img src="https://github-readme-streak-stats.herokuapp.com/?user=joshfisidi&theme=dark" />
+    <img src="https://streak-stats.demolab.com?user=joshfisidi&theme=dark&hide_border=true" />
   </a>
 </p>
 
@@ -36,6 +36,8 @@
 <tr>
 <td align="center"><details><summary><b>Web3</b></summary><p>
 <a href="https://soliditylang.org/"><img src="https://img.shields.io/badge/Solidity-363636?style=flat-square&logo=solidity&logoColor=white" /></a>
+<a href="https://solana.com/"><img src="https://img.shields.io/badge/Solana-9945FF?style=flat-square&logo=solana&logoColor=white" /></a>
+<a href="https://www.anchor-lang.com/"><img src="https://img.shields.io/badge/Anchor-000000?style=flat-square&logo=rust&logoColor=white" /></a>
 <a href="https://web3js.readthedocs.io/"><img src="https://img.shields.io/badge/Web3.js-F16822?style=flat-square&logo=web3.js&logoColor=white" /></a>
 <a href="https://docs.ethers.org/"><img src="https://img.shields.io/badge/Ethers.js-3C3C3D?style=flat-square&logo=ethereum&logoColor=white" /></a>
 </p></details></td>
@@ -72,7 +74,6 @@
 
 <br/>
 
-<!-- Projects -->
 <p>
 <a href="https://github.com/joshfisidi/pijin"><img src="https://img.shields.io/badge/pijin-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
 <a href="https://github.com/joshfisidi/blirce"><img src="https://img.shields.io/badge/blirce-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
@@ -94,10 +95,10 @@
 </p>
 </details>
 
-</div>
-
 <div align="right">
   <a href="https://www.keybr.com/profile/z4tv0x8">
-    <img src="https://img.shields.io/badge/WPM-555555?style=for-the-badge&logo=keyboard&logoColor=white" />
+    <img src="https://img.shields.io/badge/WPM-555555?style=for-the-badge&logo=gnometerminal&logoColor=white" />
   </a>
+</div>
+
 </div>
