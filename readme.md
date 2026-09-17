@@ -1,7 +1,7 @@
 <div align="center">
 
 <p>
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=14&pause=1500&color=FFFFFF&center=true&vCenter=true&width=900&height=60&lines=1000+Years+Compressed+Into+100;Ascend+The+Kardashev+Scale;Agentic+Engineers+Orchestrate+Reality;Intentional+Redundancy+Shapes+Destiny;Hope+Is+Passive+Truth;Reality+Is+Computable;Code+Was+Discovered+Not+Invented;Build+Blindly+Until+You+See;Systems+Over+Sentiment;Sovereignty+Through+Computation;Fisidi" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=14&pause=1500&color=FFFFFF&center=true&vCenter=true&width=900&height=60&lines=1000+Years+Compressed+Into+100;Ascend+The+Kardashev+Scale;Ai+Engineers+Orchestrate+Reality;Intentional+Repitition+Shapes+Destiny;Hope+Is+Passive+Truth;Reality+Is+Computable;Code+Was+Discovered+Not+Invented;Build+Blindly+Until+You+See;Systems+Over+Sentiment;Sovereignty+Through+Computation;Fisidi" />
 </p>
 
 <p>
