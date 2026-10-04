@@ -89,7 +89,7 @@
 <summary><strong>Music</strong></summary>
 <br/>
 <p>
-<a href="https://soundcloud.com/joshfisidi/the-most">
+<a href="https://soundcloud.com/yashguma/the-most">
 <img src="https://img.shields.io/badge/SoundCloud-FF5500?style=for-the-badge&logo=soundcloud&logoColor=white" />
 </a>
 </p>
