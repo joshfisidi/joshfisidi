@@ -8,7 +8,7 @@ const TIERS = {
   low:    { dpr: 1.0, px: 0.5e6, oct: 2, frameMs: 1000 / 30 },
 };
 const ORDER = ["low", "medium", "high"];
-const TRAVEL = 0.07;   // phase / s  (noise z-period 8 => 0.56 units/s outward)
+const TRAVEL = 0.02;   // phase / s: the shader multiplies it by up to 8, so keep it slow
 const SPIN = 1 / 90;   // one full turn per 90 s
 const DRIFT_X = 3.0e-4, DRIFT_Y = 1.2e-4;   // phase / s => far layer ~1.3 px/s, near ~12 px/s
 
@@ -282,9 +282,9 @@ export function createRenderer(canvas, hooks) {
 
   function step(dt) {
     boost *= Math.exp(-dt * 1.8);
-    const fast = 1 + 1.5 * boost + 2 * warp;
+    const fast = 1 + 0.4 * boost + 0.5 * warp;
     travel = (travel + dt * TRAVEL * fast) % 1;   // float64 phases, wrapped
-    spin = (spin + dt * SPIN * (1 + 0.5 * boost + warp)) % 1;
+    spin = (spin + dt * SPIN * (1 + 0.2 * boost + 0.5 * warp)) % 1;
     drift[0] = (drift[0] + dt * DRIFT_X * fast) % 1;
     drift[1] = (drift[1] + dt * DRIFT_Y * fast) % 1;
     const k = 1 - Math.exp(-dt * 3);

@@ -142,7 +142,7 @@ document.documentElement.addEventListener("pointerleave", () => {
 
 /* ---------- story: the text crawls up and away, like an opening crawl ---------- */
 const storySr = $("story-sr"), storyView = $("story-view"), storyHint = $("story-hint");
-const CRAWL_SPEED = 26;   // px per second along the tilted plane
+const CRAWL_SPEED = 11;   // px per second along the tilted plane
 const crawl = { raf: 0, y: 0, last: 0, paused: false };
 
 function buildStory() {
@@ -256,7 +256,7 @@ function showStoryPanel(animate) {
   storyTitle.focus({ preventScroll: true });
 }
 
-const CLOSED = { close: 1, x: 0, y: 0, warp: 0.15 };
+const CLOSED = { close: 1, x: 0, y: 0, warp: 0 };
 function settleClosed() {
   setWH(CLOSED);
   space?.setRunning(false);
