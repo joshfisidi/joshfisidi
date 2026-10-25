@@ -25,11 +25,11 @@
 <main class="stage">
   <nav id="portal" aria-label="Explore">
     <ul class="portal-list">
-      <li><h1 class="portal-heading"><a class="portal-link" href="#music">MUSIC</a></h1></li>
-      <li><h1 class="portal-heading"><a class="portal-link" href="#apps">APPS</a></h1></li>
-      <li><h1 class="portal-heading"><a class="portal-link" href="#games">GAMES</a></h1></li>
-      <li><h1 class="portal-heading"><a class="portal-link" href="#design">DESIGN</a></h1></li>
-      <li><h1 class="portal-heading"><a class="portal-link" href="#books">BOOKS</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="https://yashguma.com" target="_blank" rel="noopener">MUSIC</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="https://luminoise.app" target="_blank" rel="noopener">APPS</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="https://fisidi.com/timeytower" target="_blank" rel="noopener">GAMES</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="https://fisidi.com/design" target="_blank" rel="noopener">DESIGN</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="https://ecclesiapublishing.com" target="_blank" rel="noopener">BOOKS</a></h1></li>
       <li>
         <span class="portal-divider" aria-hidden="true">-</span>
         <h1 class="portal-heading"><a class="portal-link" href="#story">STORY</a></h1>
@@ -37,17 +37,14 @@
     </ul>
   </nav>
 
-  <section id="room" class="room" aria-labelledby="room-title" hidden>
-    <p class="room-index"><span id="room-pos">01</span> / 06</p>
-    <h2 id="room-title" class="room-title" tabindex="-1">MUSIC</h2>
-    <p id="room-desc" class="room-desc"></p>
-    <ul id="room-lines" class="room-lines" hidden></ul>
-    <ul id="room-links" class="room-links" hidden></ul>
-    <p id="room-note" class="room-note">Nothing published here yet.</p>
-    <div class="room-nav">
-      <a class="room-link" href="#">← Portal</a>
-      <a class="room-link" id="room-next" href="#apps">APPS →</a>
+  <section id="story-room" class="story" aria-labelledby="story-title" hidden>
+    <div class="story-head">
+      <h2 id="story-title" class="story-title" tabindex="-1">STORY</h2>
+      <p id="story-hint" class="story-hint">Click to skip</p>
+      <a class="room-link" id="story-back" href="#">← Portal</a>
     </div>
+    <div id="story-text" class="story-text" aria-hidden="true"></div>
+    <div id="story-sr" class="sr"></div>
   </section>
 </main>
 

@@ -26,6 +26,8 @@ precision highp float;
 uniform vec2 uScale;     // drawing-buffer px per CSS px (x, y)
 uniform vec2 uView;      // CSS px
 uniform float uBand;     // CSS px
+uniform float uClose;    // 0 open .. 1 the opening has closed and the tunnel fills the screen
+uniform vec2 uCenter;    // CSS px offset of the opening's centre (x right, y up)
 uniform vec2 uPointer;   // CSS px field offset
 uniform float uTravel;   // [0,1) phase
 uniform float uSpin;     // [0,1) phase
@@ -107,14 +109,14 @@ return s;
 }
 
 void main() {
-vec2 q = gl_FragCoord.xy / uScale - 0.5 * uView;
-vec2 inner = max(0.5 * uView - uBand, vec2(4.0));
+vec2 q = gl_FragCoord.xy / uScale - 0.5 * uView - uCenter;
+vec2 inner = mix(max(0.5 * uView - uBand, vec2(4.0)), vec2(2.0), uClose);
 float radius = min(uBand * 1.25, min(inner.x, inner.y) * 0.5);
 
 // 1. cheap mask first: the opening gets only the starfield, no tunnel noise
 float d = sdRoundRect(q, inner, radius);
 // the opening is transparent: only stars (additive, alpha 0) sit over the far system behind this canvas
-if (d <= 0.0) { outColor = vec4(1.0 - exp(-stars(q) * 1.35), 0.0); return; }
+if (d <= 0.0 && uClose < 0.995) { outColor = vec4(1.0 - exp(-stars(q) * 1.35), 0.0); return; }
 
 // 2. tunnel coordinates (field shifted by pointer, mask stays fixed)
 vec2 qf = q - uPointer;
@@ -167,7 +169,8 @@ export function createRenderer(canvas, hooks) {
   let prog = null, vao = null;
   const U = {};
   let cssW = 1, cssH = 1, band = 80, quality = "medium", pal = null;
-  let travel = 0, spin = 0, boost = 0;
+  let travel = 0, spin = 0, boost = 0, warp = 0, close = 0;
+  const center = [0, 0];
   const drift = [0, 0];
   const pT = [0, 0], pC = [0, 0];
   let running = false, wantRun = false, lost = false, first = false, raf = 0;
@@ -199,7 +202,7 @@ export function createRenderer(canvas, hooks) {
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS) && !gl.isContextLost()) {
       throw new Error(gl.getProgramInfoLog(prog) || "program link failed");
     }
-    for (const k of ["uScale", "uView", "uBand", "uPointer", "uTravel", "uSpin", "uOct", "uDrift", "uBg", "uA", "uB", "uC"]) {
+    for (const k of ["uScale", "uView", "uBand", "uClose", "uCenter", "uPointer", "uTravel", "uSpin", "uOct", "uDrift", "uBg", "uA", "uB", "uC"]) {
       U[k] = gl.getUniformLocation(prog, k);
     }
     vao = gl.createVertexArray();
@@ -214,6 +217,8 @@ export function createRenderer(canvas, hooks) {
     gl.uniform2f(U.uScale, gl.drawingBufferWidth / cssW, gl.drawingBufferHeight / cssH);
     gl.uniform2f(U.uView, cssW, cssH);
     gl.uniform1f(U.uBand, band);
+    gl.uniform1f(U.uClose, close);
+    gl.uniform2f(U.uCenter, center[0], center[1]);
     gl.uniform2f(U.uPointer, pC[0], pC[1]);
     gl.uniform1f(U.uTravel, travel);
     gl.uniform1f(U.uSpin, spin);
@@ -272,10 +277,11 @@ export function createRenderer(canvas, hooks) {
 
   function step(dt) {
     boost *= Math.exp(-dt * 1.8);
-    travel = (travel + dt * TRAVEL * (1 + 4 * boost)) % 1;   // float64 phases, wrapped
-    spin = (spin + dt * SPIN * (1 + boost)) % 1;
-    drift[0] = (drift[0] + dt * DRIFT_X * (1 + 4 * boost)) % 1;
-    drift[1] = (drift[1] + dt * DRIFT_Y * (1 + 4 * boost)) % 1;
+    const fast = 1 + 4 * boost + 9 * warp;
+    travel = (travel + dt * TRAVEL * fast) % 1;   // float64 phases, wrapped
+    spin = (spin + dt * SPIN * (1 + boost + 3 * warp)) % 1;
+    drift[0] = (drift[0] + dt * DRIFT_X * fast) % 1;
+    drift[1] = (drift[1] + dt * DRIFT_Y * fast) % 1;
     const k = 1 - Math.exp(-dt * 3);
     pC[0] += (pT[0] - pC[0]) * k;
     pC[1] += (pT[1] - pC[1]) * k;
@@ -360,6 +366,10 @@ export function createRenderer(canvas, hooks) {
     setPalette(p) { pal = { bg: rgb(p.bg), a: rgb(p.a), b: rgb(p.b), c: rgb(p.c) }; if (!running) draw(); },
     setRunning,
     kick() { if (running) boost = 1; },
+    // story flight: aperture closes (0..1), its centre follows the text (CSS px, y up), and the tunnel streams faster
+    setClose(c) { close = c; if (!running) draw(); },
+    setCenter(x, y) { center[0] = x; center[1] = y; if (!running) draw(); },
+    setWarp(w) { warp = w; },
     stats() { return { quality, dpr: gl.drawingBufferWidth / cssW, fps, running }; },
     dispose() {
       cancelAnimationFrame(raf);

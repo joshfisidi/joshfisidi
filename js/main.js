@@ -1,5 +1,5 @@
-// Interface: hash-routed rooms over two canvases (far system underneath, wormhole on top).
-import { ROOMS, PALETTES, DEFAULT_PALETTE } from "./config.js";
+// Interface: the portal menu over two canvases (far system underneath, wormhole on top), and the STORY sequence.
+import { STORY, PALETTES, DEFAULT_PALETTE } from "./config.js";
 import { createRenderer } from "./wormhole.js";
 import { createSpace } from "./space.js";
 
@@ -12,8 +12,10 @@ const store = {
 
 const $ = (id) => document.getElementById(id);
 const canvas = $("field"), spaceCanvas = $("space");
-const nav = $("portal"), room = $("room"), sw = $("motion"), orbitsSw = $("orbits"), readout = $("readout");
+const nav = $("portal"), story = $("story-room"), storyText = $("story-text"), storyTitle = $("story-title");
+const sw = $("motion"), orbitsSw = $("orbits"), readout = $("readout");
 const links = [...nav.querySelectorAll("a")];
+const storyLink = nav.querySelector('a[href="#story"]');
 const rm = matchMedia("(prefers-reduced-motion: reduce)");
 
 let renderer = null, space = null, failed = null, spaceFailed = false;
@@ -23,7 +25,19 @@ let palKey = store.get("wh.palette");
 if (!PALETTES[palKey]) palKey = DEFAULT_PALETTE;
 let orbitsOn = store.get("wh.orbits") !== "off";
 
+// wormhole aperture state, tracked here so a sequence interrupted halfway can resume from where it was
+const wh = { close: 0, x: 0, y: 0, warp: 0 };
+function setWH(o) {
+  Object.assign(wh, o);
+  renderer?.setClose(wh.close);
+  renderer?.setCenter(wh.x, wh.y);
+  renderer?.setWarp(wh.warp);
+}
+
+// portal -> entering -> story -> leaving -> portal
+let phase = "portal";
 const motionOn = () => pref === "on" || (pref === "system" && !rm.matches);
+const spaceWanted = () => phase === "portal" || phase === "leaving";
 
 function updateReadout() {
   if (failed && spaceFailed) { readout.textContent = failed; return; }
@@ -44,11 +58,11 @@ function updateReadout() {
 }
 
 function syncMotion() {
-  const on = motionOn();
-  sw.setAttribute("aria-checked", String(on));
-  if (!on) { renderer?.setPointer(0, 0); space?.setPointer(0, 0); }
-  renderer?.setRunning(on && !document.hidden);
-  space?.setRunning(on && !document.hidden);
+  const on = motionOn() && !document.hidden;
+  sw.setAttribute("aria-checked", String(motionOn()));
+  if (!motionOn()) { renderer?.setPointer(0, 0); space?.setPointer(0, 0); }
+  renderer?.setRunning(on);
+  space?.setRunning(on && spaceWanted());
   updateReadout();
 }
 
@@ -88,12 +102,11 @@ document.querySelectorAll('input[name="palette"]').forEach((input) => {
 });
 applyPalette(palKey);
 
-// band from the measured size of whatever sits in the opening, clamped to 5–16 % of the short side
+// band from the measured size of the menu in the opening, clamped to 5–16 % of the short side
 function updateBand() {
-  if (!renderer) return;
-  const el = room.hidden ? nav : room;
+  if (!renderer || phase !== "portal") return;
   const w = canvas.clientWidth, h = canvas.clientHeight, S = Math.min(w, h);
-  const fit = Math.min(w - el.offsetWidth, h - el.offsetHeight) / 2 - 24;
+  const fit = Math.min(w - nav.offsetWidth, h - nav.offsetHeight) / 2 - 24;
   renderer.setBand(Math.min(0.16 * S, Math.max(Math.max(18, 0.05 * S), fit)));
 }
 
@@ -102,7 +115,7 @@ const ro = new ResizeObserver(() => {
   space?.resize(spaceCanvas.clientWidth, spaceCanvas.clientHeight);
   updateBand();
 });
-[canvas, nav, room].forEach((el) => ro.observe(el));
+[canvas, nav].forEach((el) => ro.observe(el));
 
 addEventListener("pointermove", (e) => {
   if (e.pointerType !== "mouse" || !motionOn()) return;
@@ -112,57 +125,255 @@ addEventListener("pointermove", (e) => {
 }, { passive: true });
 document.documentElement.addEventListener("pointerleave", () => { renderer?.setPointer(0, 0); space?.setPointer(0, 0); });
 
-/* ---------- routing (hash rooms; links stay real anchors) ---------- */
-const roomLinks = $("room-links"), roomLines = $("room-lines"), roomNote = $("room-note");
-let lastKey = null;
+/* ---------- story: typed text ---------- */
+const storySr = $("story-sr");
+const typing = { segs: [], times: [], total: 0, t0: 0, raf: 0, shown: 0, cur: 0, follow: true, caret: null };
 
-function route(fromUser) {
-  const key = location.hash.slice(1);
-  const i = ROOMS.findIndex((r) => r.key === key);
-  if (i < 0) {
-    room.hidden = true;
-    nav.hidden = false;
-    document.title = "Josh Fisidi";
-    if (fromUser && lastKey) links.find((a) => a.hash === "#" + lastKey)?.focus();
-    lastKey = null;
-  } else {
-    const r = ROOMS[i];
-    const next = ROOMS[(i + 1) % ROOMS.length];
-    $("room-pos").textContent = String(i + 1).padStart(2, "0");
-    $("room-title").textContent = r.label;
-    $("room-desc").textContent = r.desc;
-    $("room-next").href = "#" + next.key;
-    $("room-next").textContent = next.label + " →";
-
-    roomLines.replaceChildren(...(r.lines || []).map((t) => Object.assign(document.createElement("li"), { textContent: t })));
-    roomLines.hidden = !r.lines?.length;
-    roomLinks.replaceChildren(...(r.links || []).map((l) => {
-      const li = document.createElement("li");
-      const a = Object.assign(document.createElement("a"), { href: l.href, textContent: l.label, target: "_blank", rel: "noopener noreferrer" });
-      li.append(a);
-      return li;
-    }));
-    roomLinks.hidden = !r.links?.length;
-    roomNote.hidden = !!r.links?.length;
-
-    nav.hidden = true;
-    room.hidden = false;
-    document.title = `${r.label[0]}${r.label.slice(1).toLowerCase()} · Josh Fisidi`;
-    lastKey = r.key;
-    if (fromUser) $("room-title").focus();
+function buildStory() {
+  storyText.replaceChildren();
+  storySr.replaceChildren();
+  const T = typing;
+  T.segs = []; T.times = []; T.shown = 0; T.cur = 0; T.follow = true;
+  let n = 0, clock = 0;
+  for (const para of STORY) {
+    const p = document.createElement("p");
+    storyText.append(p);
+    storySr.append(Object.assign(document.createElement("p"), { textContent: para.replaceAll("**", "") }));
+    para.split("**").forEach((text, i) => {
+      if (!text) return;
+      const el = document.createElement(i % 2 ? "strong" : "span");
+      p.append(el);
+      T.segs.push({ el, p, text, start: n, shown: 0 });
+      for (const ch of text) {
+        clock += 6 + (ch === "," || ch === ";" ? 35 : ch === "." || ch === "!" || ch === "?" || ch === ":" || ch === "—" ? 90 : 0);
+        T.times.push(clock);
+        n++;
+      }
+    });
+    clock += 300;   // beat between paragraphs
+    T.times[n - 1] = clock;
   }
-  updateBand();
+  T.total = clock;
+  T.caret = Object.assign(document.createElement("span"), { className: "caret" });
+  T.caret.setAttribute("aria-hidden", "true");
 }
-addEventListener("hashchange", () => route(true));
 
-// click feedback runs alongside navigation, never in front of it
-document.addEventListener("click", (e) => {
-  if (e.target.closest?.('a[href^="#"]')) { renderer?.kick(); space?.kick(); }
+function paint(count) {
+  const T = typing;
+  while (T.cur < T.segs.length) {
+    const s = T.segs[T.cur];
+    const len = [...s.text].length;
+    const want = Math.max(0, Math.min(len, count - s.start));
+    if (want !== s.shown) {
+      s.el.textContent = [...s.text].slice(0, want).join("");
+      s.shown = want;
+    }
+    if (want < len) { s.p.append(T.caret); break; }
+    T.cur++;
+  }
+  if (T.follow) storyText.scrollTop = storyText.scrollHeight;
+}
+
+function stopTyping() { cancelAnimationFrame(typing.raf); typing.raf = 0; }
+
+function finishTyping() {
+  stopTyping();
+  paint(typing.times.length);
+  typing.caret?.remove();
+  story.classList.add("is-done");
+}
+
+function startTyping() {
+  const T = typing;
+  stopTyping();
+  buildStory();
+  story.classList.remove("is-done");
+  T.t0 = performance.now();
+  const tick = (now) => {
+    const el = now - T.t0;
+    if (el >= T.total) { finishTyping(); return; }
+    let lo = T.shown;
+    while (lo < T.times.length && T.times[lo] <= el) lo++;   // times ascend: resume from the last position
+    T.shown = lo;
+    paint(lo);
+    T.raf = requestAnimationFrame(tick);
+  };
+  T.raf = requestAnimationFrame(tick);
+}
+
+storyText.addEventListener("click", () => { if (typing.raf) finishTyping(); });
+storyText.addEventListener("wheel", () => { typing.follow = false; }, { passive: true });
+storyText.addEventListener("touchmove", () => { typing.follow = false; }, { passive: true });
+
+/* ---------- story: sequence ---------- */
+const ease = {
+  inOut: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+  out: (t) => 1 - Math.pow(1 - t, 3),
+  smooth: (t) => t * t * (3 - 2 * t),
+};
+let run = 0;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const frames = (ms, fn, id) => new Promise((resolve) => {
+  const t0 = performance.now();
+  const step = (now) => {
+    if (id !== run) return resolve(false);
+    const t = Math.min(1, (now - t0) / ms);
+    fn(t);
+    t < 1 ? requestAnimationFrame(step) : resolve(true);
+  };
+  requestAnimationFrame(step);
+});
+
+// top-down order: the five links, then the divider that sits above STORY
+const cascadeTargets = () => {
+  const lis = [...nav.querySelectorAll(".portal-list > li")];
+  return [...lis.slice(0, -1), lis.at(-1).querySelector(".portal-divider")];
+};
+
+function resetPortal() {
+  for (const el of [...cascadeTargets(), storyLink]) {
+    el.getAnimations().forEach((a) => a.cancel());
+    el.style.transform = el.style.opacity = el.style.filter = el.style.willChange = "";
+  }
+}
+
+function showStoryPanel(animate) {
+  nav.hidden = true;
+  story.hidden = false;
+  story.classList.remove("is-done");
+  if (animate) story.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 500, easing: "ease-out" });
+  storyTitle.focus({ preventScroll: true });
+}
+
+function settleClosed() {
+  setWH({ close: 1, x: 0, y: 0, warp: 0.35 });
+  space?.setRunning(false);
+}
+
+async function enterStory({ instant = false } = {}) {
+  if (phase === "entering" || phase === "story") return;
+  const id = ++run;
+  phase = "entering";
+  const animate = !instant && motionOn() && !!renderer;
+
+  if (!animate) {
+    settleClosed();
+    showStoryPanel(false);
+    phase = "story";
+    if (motionOn()) startTyping(); else { buildStory(); finishTyping(); }
+    return;
+  }
+
+  // 1. the other options fade out, top down, a few milliseconds apart
+  const fades = cascadeTargets().map((el, i) => el.animate(
+    [{ opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(5px)" }],
+    { duration: 170, delay: i * 65, easing: "ease-out", fill: "forwards" }));
+  storyLink.style.pointerEvents = "none";
+  await sleep(300);
+  if (id !== run) return;
+
+  // 2. STORY curves up the z axis and shoots into the stars; the opening shrinks and follows it
+  const W = innerWidth, H = innerHeight;
+  const r = storyLink.getBoundingClientRect();
+  const x0 = r.left + r.width / 2, y0 = r.top + r.height / 2;
+  const x1 = W * 0.5, y1 = H * 0.3;                 // vanishing point of the flight
+  const cx = x0 + W * 0.2, cy = y0 - H * 0.34;      // bend of the path
+  storyLink.style.willChange = "transform, opacity, filter";
+  const done = await frames(1750, (t) => {
+    const e = ease.inOut(t);
+    const k = 1 - e;
+    const x = k * k * x0 + 2 * k * e * cx + e * e * x1;
+    const y = k * k * y0 + 2 * k * e * cy + e * e * y1;
+    const s = 1 / (1 + 15 * Math.pow(e, 2.1));
+    storyLink.style.transform = `translate(${x - x0}px, ${y - y0}px) perspective(700px) rotateX(${55 * e}deg) scale(${s})`;
+    storyLink.style.opacity = String(1 - ease.smooth(Math.max(0, (t - 0.82) / 0.18)));
+    storyLink.style.filter = `brightness(${1 + 1.6 * e}) drop-shadow(0 0 ${0.6 * e}em rgba(255,150,130,.9))`;
+    setWH({ x: x - W / 2, y: -(y - H / 2), close: ease.smooth(Math.min(1, e * 1.04)), warp: 0.9 * ease.smooth(t) });
+  }, id);
+  if (!done) return;
+  space?.setRunning(false);
+  fades.forEach((a) => a.cancel());
+
+  // 3. the vortex fills the screen: its centre eases back and the tunnel streams past
+  const c0 = [x1 - W / 2, -(y1 - H / 2)];
+  if (!await frames(750, (t) => {
+    const e = ease.inOut(t);
+    setWH({ x: c0[0] * (1 - e), y: c0[1] * (1 - e), warp: 0.9 - 0.55 * ease.out(t) });
+  }, id)) return;
+  settleClosed();
+
+  // 4. the story arrives and is typed
+  showStoryPanel(true);
+  phase = "story";
+  await sleep(350);
+  if (id === run && phase === "story") startTyping();
+}
+
+async function leaveStory() {
+  if (phase !== "story" && phase !== "entering") return;
+  const id = ++run;
+  const wasEntering = phase === "entering";
+  phase = "leaving";
+  stopTyping();
+  const animate = motionOn() && !!renderer;
+
+  const reveal = () => {
+    resetPortal();
+    storyLink.style.pointerEvents = "";
+    story.hidden = true;
+    nav.hidden = false;
+  };
+
+  if (!animate) {
+    reveal();
+    setWH({ close: 0, x: 0, y: 0, warp: 0 });
+    phase = "portal";
+    syncMotion(); updateBand();
+    storyLink.focus({ preventScroll: true });
+    return;
+  }
+
+  if (!wasEntering) {
+    await story.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-in", fill: "forwards" }).finished.catch(() => {});
+    if (id !== run) return;
+  }
+  reveal();
+  story.getAnimations().forEach((a) => a.cancel());
+  syncMotion();
+  const items = cascadeTargets();
+  items.forEach((el, i) => el.animate([{ opacity: 0, filter: "blur(5px)" }, { opacity: 1, filter: "blur(0px)" }],
+    { duration: 260, delay: 450 + i * 65, easing: "ease-out", fill: "backwards" }));
+  storyLink.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 450 + items.length * 65, easing: "ease-out", fill: "backwards" });
+
+  const from = { ...wh };
+  const ok = await frames(1150, (t) => {
+    const e = ease.inOut(t);
+    setWH({ close: from.close * (1 - e), x: from.x * (1 - e), y: from.y * (1 - e), warp: from.warp * (1 - ease.out(t)) });
+  }, id);
+  if (!ok) return;
+  setWH({ close: 0, x: 0, y: 0, warp: 0 });
+  phase = "portal";
+  syncMotion();
+  updateBand();
+  storyLink.focus({ preventScroll: true });
+}
+
+storyLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (phase !== "portal") return;
+  renderer?.kick();
+  history.pushState(null, "", "#story");
+  enterStory();
+});
+addEventListener("hashchange", () => {
+  if (location.hash === "#story") enterStory();
+  else leaveStory();
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !room.hidden) { location.hash = ""; return; }
-  if ((e.key === "ArrowDown" || e.key === "ArrowUp") && !nav.hidden) {
+  if (e.key === "Escape" && (phase === "story" || phase === "entering")) { location.hash = ""; return; }
+  if ((e.key === " " || e.key === "Enter") && phase === "story" && typing.raf && e.target === document.body) { e.preventDefault(); finishTyping(); return; }
+  if ((e.key === "ArrowDown" || e.key === "ArrowUp") && phase === "portal") {
     const i = links.indexOf(document.activeElement);
     if (i < 0) return;
     e.preventDefault();
@@ -170,7 +381,9 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-route(false);
+// coming straight to /#story: no departure, straight into the tunnel
+const startInStory = location.hash === "#story";
+if (startInStory) { nav.hidden = true; story.hidden = false; }
 
 /* ---------- graphics start after the menu has painted ---------- */
 async function init() {
@@ -197,6 +410,8 @@ async function init() {
     renderer.resize(canvas.clientWidth, canvas.clientHeight);
     updateBand();
   }
+  setWH({});   // push the tracked aperture state into the renderer
+  if (startInStory) enterStory({ instant: true });
   syncMotion();
 
   try {

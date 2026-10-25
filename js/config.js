@@ -1,42 +1,16 @@
 // Content, palettes and the planetary system. Everything tunable lives here.
 
-export const ROOMS = [
-  {
-    key: "music", label: "MUSIC",
-    desc: "Records, live sets and unfinished sketches.",
-    links: [
-      { label: "BLIRCE · the music DAO", href: "https://blirce.vercel.app" },
-      { label: "SoundCloud · The Most", href: "https://soundcloud.com/yashguma/the-most" },
-    ],
-  },
-  {
-    key: "apps", label: "APPS",
-    desc: "Small tools built to be used every day.",
-    links: [
-      { label: "PIJIN · built-in agentic chrome messenger", href: "https://pijin.xyz" },
-      { label: "NEBULA", href: "https://xnebula.vercel.app" },
-      { label: "POLYDEX · control your AI agents from your phone", href: "https://github.com/joshfisidi/polydex" },
-      { label: "CLERGY · Rust", href: "https://github.com/joshfisidi/clergy" },
-    ],
-  },
-  { key: "games", label: "GAMES", desc: "Playable things, finished and otherwise.", links: [] },
-  { key: "design", label: "DESIGN", desc: "Identity, interface and print work.", links: [] },
-  { key: "books", label: "BOOKS", desc: "Writing in long form.", links: [] },
-  {
-    key: "story", label: "STORY",
-    desc: "Who is behind all of this, and why.",
-    lines: [
-      "Build trade infra. Immutable apps and games.",
-      "1000 years compressed into 100.",
-      "Reality is computable. Code was discovered, not invented.",
-      "Build blindly until you see.",
-    ],
-    links: [
-      { label: "GitHub · @joshfisidi", href: "https://github.com/joshfisidi" },
-      { label: "X · @joshfisidi", href: "https://x.com/joshfisidi" },
-      { label: "Anime list · fisidi", href: "https://myanimelist.net/profile/fisidi" },
-    ],
-  },
+// The five other portal items link straight out (see index.html). STORY is internal: it plays the wormhole
+// sequence and types this text.
+// **bold** marks emphasis. One entry per paragraph.
+export const STORY = [
+  "Born in Guyana, shaped by the vibrant culture of Trinidad, and raised into adulthood in Toronto, Canada, Joshua Gomes developed an unconventional perspective on the world. Moving between countries, cultures, and circumstances taught Josh to adapt early, think independently, and see possibilities where others saw limitations.",
+  "Driven by an insatiable curiosity, Joshua pursued knowledge beyond traditional classrooms, teaching himself software engineering, artificial intelligence, blockchain technology, music production, and the architecture of complex systems. For Josh, creativity and engineering were never separate disciplines\u2014they were different expressions of the same instinct: **to turn imagination into something real.**",
+  "The journey came with considerable adversity. Chronic illness, financial uncertainty, and personal setbacks repeatedly challenged Josh's ambitions, but never extinguished the determination to build. Each obstacle became another problem to understand, another system to navigate, another reason to pursue independence.",
+  "Today, Joshua is the founder of **Fisidi Inc.**, an evolving technology and creative enterprise connecting software, intelligent systems, finance, gaming, and digital entertainment. Behind these ventures lies a larger strategy: building the infrastructure and capital necessary to pursue scientific discovery, human longevity, and technologies capable of transforming lives.",
+  "**Joshua isn't pursuing success merely to participate in the world as it exists. Josh is building toward the ability to change what the world can become.**",
+  "From a young immigrant discovering new possibilities to an independent inventor pursuing ambitions that span industries and generations, Joshua's story remains unfinished.",
+  "**The defining achievement isn't behind Josh. It's what everything so far has been preparing Josh to create.**",
 ];
 
 // css custom properties + shader colours. Default is deep red.
