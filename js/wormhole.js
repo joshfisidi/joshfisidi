@@ -115,8 +115,12 @@ float radius = min(uBand * 1.25, min(inner.x, inner.y) * 0.5);
 
 // 1. cheap mask first: the opening gets only the starfield, no tunnel noise
 float d = sdRoundRect(q, inner, radius);
-// the opening is transparent: only stars (additive, alpha 0) sit over the far system behind this canvas
-if (d <= 0.0 && uClose < 0.995) { outColor = vec4(1.0 - exp(-stars(q) * 1.35), 0.0); return; }
+// the opening is transparent: only stars sit over the far system behind this canvas
+if (d <= 0.0 && uClose < 0.995) {
+  vec3 st = 1.0 - exp(-stars(q) * 1.35);
+  outColor = vec4(st, max(max(st.r, st.g), st.b));   // valid premultiplied colour: alpha never below the brightest channel
+  return;
+}
 
 // 2. tunnel coordinates (field shifted by pointer, mask stays fixed)
 vec2 qf = q - uPointer;
@@ -155,7 +159,8 @@ if (u < 0.32) L += stars(q) * (1.0 - mask);                     // stars continu
 // premultiplied: the tunnel's own background colour only counts where it is opaque (alpha = mask)
 vec3 col = (1.0 - exp(-L * 1.35)) + uBg * mask;
 col += (hash(vec3(gl_FragCoord.xy, 1.0)) - 0.5) / 255.0 * mask;  // dither against banding
-outColor = vec4(max(col, 0.0), mask);
+col = max(col, 0.0);
+outColor = vec4(col, clamp(max(mask, max(max(col.r, col.g), col.b)), 0.0, 1.0));
 }`;
 
 /* ---------- renderer ---------- */
@@ -277,9 +282,9 @@ export function createRenderer(canvas, hooks) {
 
   function step(dt) {
     boost *= Math.exp(-dt * 1.8);
-    const fast = 1 + 4 * boost + 9 * warp;
+    const fast = 1 + 1.5 * boost + 2 * warp;
     travel = (travel + dt * TRAVEL * fast) % 1;   // float64 phases, wrapped
-    spin = (spin + dt * SPIN * (1 + boost + 3 * warp)) % 1;
+    spin = (spin + dt * SPIN * (1 + 0.5 * boost + warp)) % 1;
     drift[0] = (drift[0] + dt * DRIFT_X * fast) % 1;
     drift[1] = (drift[1] + dt * DRIFT_Y * fast) % 1;
     const k = 1 - Math.exp(-dt * 3);

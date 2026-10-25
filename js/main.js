@@ -4,6 +4,7 @@ import { createRenderer } from "./wormhole.js";
 import { createSpace } from "./space.js";
 
 const POINTER_PX = 6;
+const rootStyle = document.documentElement.style;
 
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
@@ -102,8 +103,17 @@ document.querySelectorAll('input[name="palette"]').forEach((input) => {
 });
 applyPalette(palKey);
 
+// the portrait takes whatever room is free above the menu; it steps aside on short screens
+function updateAvatar() {
+  const free = (canvas.clientHeight - nav.offsetHeight) / 2 - 44;
+  const size = Math.min(168, free, canvas.clientWidth * 0.3);
+  nav.classList.toggle("no-avatar", size < 64);
+  if (size >= 64) nav.style.setProperty("--av", `${Math.round(size)}px`);
+}
+
 // band from the measured size of the menu in the opening, clamped to 5–16 % of the short side
 function updateBand() {
+  updateAvatar();
   if (!renderer || phase !== "portal") return;
   const w = canvas.clientWidth, h = canvas.clientHeight, S = Math.min(w, h);
   const fit = Math.min(w - nav.offsetWidth, h - nav.offsetHeight) / 2 - 24;
@@ -122,88 +132,90 @@ addEventListener("pointermove", (e) => {
   const px = -(e.clientX / innerWidth - 0.5) * 2 * POINTER_PX, py = (e.clientY / innerHeight - 0.5) * 2 * POINTER_PX;
   renderer?.setPointer(px, py);
   space?.setPointer(px, py);
+  rootStyle.setProperty("--mx", (-px / POINTER_PX).toFixed(3));
+  rootStyle.setProperty("--my", (py / POINTER_PX).toFixed(3));
 }, { passive: true });
-document.documentElement.addEventListener("pointerleave", () => { renderer?.setPointer(0, 0); space?.setPointer(0, 0); });
+document.documentElement.addEventListener("pointerleave", () => {
+  renderer?.setPointer(0, 0); space?.setPointer(0, 0);
+  rootStyle.setProperty("--mx", "0"); rootStyle.setProperty("--my", "0");
+});
 
-/* ---------- story: typed text ---------- */
-const storySr = $("story-sr");
-const typing = { segs: [], times: [], total: 0, t0: 0, raf: 0, shown: 0, cur: 0, follow: true, caret: null };
+/* ---------- story: the text crawls up and away, like an opening crawl ---------- */
+const storySr = $("story-sr"), storyView = $("story-view"), storyHint = $("story-hint");
+const CRAWL_SPEED = 26;   // px per second along the tilted plane
+const crawl = { raf: 0, y: 0, last: 0, paused: false };
 
 function buildStory() {
   storyText.replaceChildren();
   storySr.replaceChildren();
-  const T = typing;
-  T.segs = []; T.times = []; T.shown = 0; T.cur = 0; T.follow = true;
-  let n = 0, clock = 0;
   for (const para of STORY) {
     const p = document.createElement("p");
+    para.split("**").forEach((text, i) => {
+      if (text) p.append(Object.assign(document.createElement(i % 2 ? "strong" : "span"), { textContent: text }));
+    });
     storyText.append(p);
     storySr.append(Object.assign(document.createElement("p"), { textContent: para.replaceAll("**", "") }));
-    para.split("**").forEach((text, i) => {
-      if (!text) return;
-      const el = document.createElement(i % 2 ? "strong" : "span");
-      p.append(el);
-      T.segs.push({ el, p, text, start: n, shown: 0 });
-      for (const ch of text) {
-        clock += 6 + (ch === "," || ch === ";" ? 35 : ch === "." || ch === "!" || ch === "?" || ch === ":" || ch === "—" ? 90 : 0);
-        T.times.push(clock);
-        n++;
-      }
-    });
-    clock += 300;   // beat between paragraphs
-    T.times[n - 1] = clock;
   }
-  T.total = clock;
-  T.caret = Object.assign(document.createElement("span"), { className: "caret" });
-  T.caret.setAttribute("aria-hidden", "true");
 }
 
-function paint(count) {
-  const T = typing;
-  while (T.cur < T.segs.length) {
-    const s = T.segs[T.cur];
-    const len = [...s.text].length;
-    const want = Math.max(0, Math.min(len, count - s.start));
-    if (want !== s.shown) {
-      s.el.textContent = [...s.text].slice(0, want).join("");
-      s.shown = want;
-    }
-    if (want < len) { s.p.append(T.caret); break; }
-    T.cur++;
-  }
-  if (T.follow) storyText.scrollTop = storyText.scrollHeight;
-}
+// y is the text's offset from the bottom of the view; it starts just below and ends once the last line has gone
+const crawlStart = () => storyView.clientHeight;
+const crawlEnd = () => -storyText.offsetHeight - storyView.clientHeight * 0.4;
+function placeCrawl() { storyText.style.transform = `rotateX(24deg) translateY(${crawl.y}px)`; }
 
-function stopTyping() { cancelAnimationFrame(typing.raf); typing.raf = 0; }
+function stopCrawl() { cancelAnimationFrame(crawl.raf); crawl.raf = 0; }
 
-function finishTyping() {
-  stopTyping();
-  paint(typing.times.length);
-  typing.caret?.remove();
-  story.classList.add("is-done");
-}
-
-function startTyping() {
-  const T = typing;
-  stopTyping();
+function startCrawl() {
+  stopCrawl();
   buildStory();
-  story.classList.remove("is-done");
-  T.t0 = performance.now();
+  story.classList.add("is-crawl");
+  crawl.y = crawlStart();
+  crawl.paused = false;
+  crawl.last = performance.now();
+  storyHint.textContent = "Tap to pause";
+  placeCrawl();
   const tick = (now) => {
-    const el = now - T.t0;
-    if (el >= T.total) { finishTyping(); return; }
-    let lo = T.shown;
-    while (lo < T.times.length && T.times[lo] <= el) lo++;   // times ascend: resume from the last position
-    T.shown = lo;
-    paint(lo);
-    T.raf = requestAnimationFrame(tick);
+    const dt = Math.min(0.1, (now - crawl.last) / 1000);
+    crawl.last = now;
+    if (!crawl.paused) {
+      crawl.y -= dt * CRAWL_SPEED;
+      if (crawl.y < crawlEnd()) crawl.y = crawlStart();   // run it again from the bottom
+      placeCrawl();
+    }
+    crawl.raf = requestAnimationFrame(tick);
   };
-  T.raf = requestAnimationFrame(tick);
+  crawl.raf = requestAnimationFrame(tick);
 }
 
-storyText.addEventListener("click", () => { if (typing.raf) finishTyping(); });
-storyText.addEventListener("wheel", () => { typing.follow = false; }, { passive: true });
-storyText.addEventListener("touchmove", () => { typing.follow = false; }, { passive: true });
+function showStatic() {
+  stopCrawl();
+  buildStory();
+  story.classList.remove("is-crawl");
+  storyText.style.transform = "";
+  storyHint.textContent = "";
+}
+
+function togglePause() {
+  if (!crawl.raf) return;
+  crawl.paused = !crawl.paused;
+  storyHint.textContent = crawl.paused ? "Tap to resume" : "Tap to pause";
+}
+function scrub(dy) {
+  if (!crawl.raf) return;
+  crawl.y = Math.min(crawlStart(), Math.max(crawlEnd(), crawl.y - dy));
+  placeCrawl();
+}
+
+storyView.addEventListener("click", togglePause);
+storyView.addEventListener("wheel", (e) => { if (crawl.raf) { e.preventDefault(); scrub(e.deltaY * 0.5); } }, { passive: false });
+let touchY = null;
+storyView.addEventListener("touchstart", (e) => { touchY = e.touches[0].clientY; }, { passive: true });
+storyView.addEventListener("touchmove", (e) => {
+  if (touchY == null || !crawl.raf) return;
+  e.preventDefault();
+  scrub(touchY - e.touches[0].clientY);
+  touchY = e.touches[0].clientY;
+}, { passive: false });
 
 /* ---------- story: sequence ---------- */
 const ease = {
@@ -224,10 +236,10 @@ const frames = (ms, fn, id) => new Promise((resolve) => {
   requestAnimationFrame(step);
 });
 
-// top-down order: the five links, then the divider that sits above STORY
+// top-down order: the portrait, the five links, then the divider that sits above STORY
 const cascadeTargets = () => {
   const lis = [...nav.querySelectorAll(".portal-list > li")];
-  return [...lis.slice(0, -1), lis.at(-1).querySelector(".portal-divider")];
+  return [nav.querySelector(".avatar"), ...lis.slice(0, -1), lis.at(-1).querySelector(".portal-divider")];
 };
 
 function resetPortal() {
@@ -240,13 +252,13 @@ function resetPortal() {
 function showStoryPanel(animate) {
   nav.hidden = true;
   story.hidden = false;
-  story.classList.remove("is-done");
-  if (animate) story.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 500, easing: "ease-out" });
+  if (animate) story.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1100, easing: "ease-out" });
   storyTitle.focus({ preventScroll: true });
 }
 
+const CLOSED = { close: 1, x: 0, y: 0, warp: 0.15 };
 function settleClosed() {
-  setWH({ close: 1, x: 0, y: 0, warp: 0.35 });
+  setWH(CLOSED);
   space?.setRunning(false);
 }
 
@@ -260,53 +272,37 @@ async function enterStory({ instant = false } = {}) {
     settleClosed();
     showStoryPanel(false);
     phase = "story";
-    if (motionOn()) startTyping(); else { buildStory(); finishTyping(); }
+    if (motionOn()) startCrawl(); else showStatic();
     return;
   }
 
-  // 1. the other options fade out, top down, a few milliseconds apart
+  // 1. the other options fade out, top down
   const fades = cascadeTargets().map((el, i) => el.animate(
     [{ opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(5px)" }],
-    { duration: 170, delay: i * 65, easing: "ease-out", fill: "forwards" }));
+    { duration: 380, delay: i * 80, easing: "ease-out", fill: "forwards" }));
   storyLink.style.pointerEvents = "none";
-  await sleep(300);
+  await sleep(450);
   if (id !== run) return;
 
-  // 2. STORY curves up the z axis and shoots into the stars; the opening shrinks and follows it
-  const W = innerWidth, H = innerHeight;
-  const r = storyLink.getBoundingClientRect();
-  const x0 = r.left + r.width / 2, y0 = r.top + r.height / 2;
-  const x1 = W * 0.5, y1 = H * 0.3;                 // vanishing point of the flight
-  const cx = x0 + W * 0.2, cy = y0 - H * 0.34;      // bend of the path
+  // 2. STORY drifts back along -x and away into depth while the opening closes slowly around the centre
+  const W = innerWidth;
   storyLink.style.willChange = "transform, opacity, filter";
-  const done = await frames(1750, (t) => {
+  const from = { ...wh };
+  const done = await frames(2600, (t) => {
     const e = ease.inOut(t);
-    const k = 1 - e;
-    const x = k * k * x0 + 2 * k * e * cx + e * e * x1;
-    const y = k * k * y0 + 2 * k * e * cy + e * e * y1;
-    const s = 1 / (1 + 15 * Math.pow(e, 2.1));
-    storyLink.style.transform = `translate(${x - x0}px, ${y - y0}px) perspective(700px) rotateX(${55 * e}deg) scale(${s})`;
-    storyLink.style.opacity = String(1 - ease.smooth(Math.max(0, (t - 0.82) / 0.18)));
-    storyLink.style.filter = `brightness(${1 + 1.6 * e}) drop-shadow(0 0 ${0.6 * e}em rgba(255,150,130,.9))`;
-    setWH({ x: x - W / 2, y: -(y - H / 2), close: ease.smooth(Math.min(1, e * 1.04)), warp: 0.9 * ease.smooth(t) });
+    storyLink.style.transform = `perspective(900px) translate3d(${-0.45 * W * e}px, 0, ${-1400 * e}px) rotateY(${28 * e}deg)`;
+    storyLink.style.opacity = String(1 - ease.smooth(Math.min(1, t / 0.9)));
+    storyLink.style.filter = `blur(${2 * e}px)`;
+    setWH({ x: from.x * (1 - e), y: from.y * (1 - e), close: ease.smooth(t), warp: CLOSED.warp * ease.smooth(t) });
   }, id);
   if (!done) return;
-  space?.setRunning(false);
   fades.forEach((a) => a.cancel());
-
-  // 3. the vortex fills the screen: its centre eases back and the tunnel streams past
-  const c0 = [x1 - W / 2, -(y1 - H / 2)];
-  if (!await frames(750, (t) => {
-    const e = ease.inOut(t);
-    setWH({ x: c0[0] * (1 - e), y: c0[1] * (1 - e), warp: 0.9 - 0.55 * ease.out(t) });
-  }, id)) return;
   settleClosed();
 
-  // 4. the story arrives and is typed
+  // 3. black falls and the story crawls up
   showStoryPanel(true);
   phase = "story";
-  await sleep(350);
-  if (id === run && phase === "story") startTyping();
+  startCrawl();
 }
 
 async function leaveStory() {
@@ -314,7 +310,7 @@ async function leaveStory() {
   const id = ++run;
   const wasEntering = phase === "entering";
   phase = "leaving";
-  stopTyping();
+  stopCrawl();
   const animate = motionOn() && !!renderer;
 
   const reveal = () => {
@@ -334,7 +330,7 @@ async function leaveStory() {
   }
 
   if (!wasEntering) {
-    await story.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: "ease-in", fill: "forwards" }).finished.catch(() => {});
+    await story.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, easing: "ease-in", fill: "forwards" }).finished.catch(() => {});
     if (id !== run) return;
   }
   reveal();
@@ -342,13 +338,13 @@ async function leaveStory() {
   syncMotion();
   const items = cascadeTargets();
   items.forEach((el, i) => el.animate([{ opacity: 0, filter: "blur(5px)" }, { opacity: 1, filter: "blur(0px)" }],
-    { duration: 260, delay: 450 + i * 65, easing: "ease-out", fill: "backwards" }));
-  storyLink.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 450 + items.length * 65, easing: "ease-out", fill: "backwards" });
+    { duration: 420, delay: 900 + i * 80, easing: "ease-out", fill: "backwards" }));
+  storyLink.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, delay: 900 + items.length * 80, easing: "ease-out", fill: "backwards" });
 
   const from = { ...wh };
-  const ok = await frames(1150, (t) => {
+  const ok = await frames(1800, (t) => {
     const e = ease.inOut(t);
-    setWH({ close: from.close * (1 - e), x: from.x * (1 - e), y: from.y * (1 - e), warp: from.warp * (1 - ease.out(t)) });
+    setWH({ close: from.close * (1 - e), x: from.x * (1 - e), y: from.y * (1 - e), warp: from.warp * (1 - e) });
   }, id);
   if (!ok) return;
   setWH({ close: 0, x: 0, y: 0, warp: 0 });
@@ -361,7 +357,6 @@ async function leaveStory() {
 storyLink.addEventListener("click", (e) => {
   e.preventDefault();
   if (phase !== "portal") return;
-  renderer?.kick();
   history.pushState(null, "", "#story");
   enterStory();
 });
@@ -372,7 +367,7 @@ addEventListener("hashchange", () => {
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && (phase === "story" || phase === "entering")) { location.hash = ""; return; }
-  if ((e.key === " " || e.key === "Enter") && phase === "story" && typing.raf && e.target === document.body) { e.preventDefault(); finishTyping(); return; }
+  if (e.key === " " && phase === "story" && crawl.raf && !e.target.closest?.("a, button, input")) { e.preventDefault(); togglePause(); return; }
   if ((e.key === "ArrowDown" || e.key === "ArrowUp") && phase === "portal") {
     const i = links.indexOf(document.activeElement);
     if (i < 0) return;

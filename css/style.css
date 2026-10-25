@@ -201,47 +201,55 @@ body {
   #field, #space, .switch, .switch .thumb { transition: none; }
 }
 
-/* story: typed text over the full-screen tunnel */
-.story { display: grid; gap: 12px; width: min(46rem, 100%); }
-.story-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 20px; }
+/* story: black screen, the text crawls up and away into the distance */
+.story {
+  position: fixed; inset: 0; z-index: 15;
+  display: grid; grid-template-rows: auto 1fr;
+  background: #000;
+  padding: calc(env(safe-area-inset-top, 0px) + 18px) max(16px, env(safe-area-inset-right, 0px)) 56px max(16px, env(safe-area-inset-left, 0px));
+}
+.story-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 20px; position: relative; z-index: 1; }
 .story-title {
   margin: 0; outline: none;
   font-size: 13px; font-weight: 500; font-stretch: 112%;
   letter-spacing: 0.22em;
   color: var(--ink-dim);
 }
-.story-hint { margin: 0 auto 0 0; font: 400 11px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); transition: opacity 0.4s; }
-.story.is-done .story-hint { opacity: 0; }
+.story-hint { margin: 0 auto 0 0; font: 400 11px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); }
+.story-view {
+  position: relative; min-height: 0;
+  overflow-y: auto; overscroll-behavior: contain;
+  display: grid; justify-items: center; align-content: start;
+}
 .story-text {
   box-sizing: border-box;
-  max-height: min(72svh, 44rem);
-  overflow-y: auto; overscroll-behavior: contain;
-  padding: clamp(18px, 3vw, 32px);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: color-mix(in oklab, var(--bg) 68%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  font-size: clamp(0.98rem, 0.9rem + 0.3vw, 1.15rem);
-  line-height: 1.65;
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
-  cursor: default;
+  width: min(36rem, 100%);
+  padding-block: 24px;
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.4rem);
+  line-height: 1.6;
+  color: color-mix(in oklab, var(--b) 35%, #f4e6e2);
 }
-.story:not(.is-done) .story-text { cursor: pointer; }
-.story-text p { margin: 0 0 1.15em; }
+.story-text p { margin: 0 0 1.2em; }
 .story-text p:last-child { margin-bottom: 0; }
 .story-text strong {
   font-weight: 600; color: var(--ink-hi);
   text-shadow: 0 0 0.9em color-mix(in oklab, var(--b) 55%, transparent);
 }
-.caret {
-  display: inline-block; width: 0.5em; height: 1.05em; margin-left: 2px;
-  vertical-align: -0.16em; background: var(--b);
-  animation: blink 1s steps(1) infinite;
+/* the crawl: a tilted plane the text slides up along, fading where it meets the horizon */
+.story.is-crawl .story-view {
+  overflow: hidden; display: block; cursor: pointer;
+  perspective: 360px; perspective-origin: 50% 0%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 38%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 38%);
+  touch-action: none;
 }
-@keyframes blink { 50% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
+.story.is-crawl .story-text {
+  position: absolute; left: 50%; bottom: 0; margin-left: max(-18rem, -50%);
+  padding-block: 0;
+  transform-origin: 50% 100%;
+  text-align: justify; hyphens: auto;
+  will-change: transform;
+}
 
 /* footer links */
 .site-foot {
@@ -263,3 +271,58 @@ body {
   .site-foot { left: calc(env(safe-area-inset-left, 0px) + 12px); right: auto; }
 }
 .nojs { position: fixed; inset: auto 16px 16px; z-index: 30; font: 12px/1.5 var(--mono); color: var(--ink-dim); }
+
+/* portrait: a circle floating above the menu, lit like the planets behind it, but still a photograph */
+#portal { position: relative; }
+.avatar {
+  --av: 120px;                       /* set from script to fit the free space above the menu */
+  position: absolute; left: 50%; bottom: 100%;
+  width: var(--av); height: var(--av);
+  margin: 0 0 clamp(10px, 2.2svh, 24px) calc(var(--av) / -2);
+  transform: translate(calc(var(--mx, 0) * -8px), calc(var(--my, 0) * -6px));
+  transition: transform 0.35s ease-out;
+  pointer-events: none;
+}
+#portal.no-avatar .avatar { display: none; }
+.avatar::after {                      /* soft glow on the "ground" below it, to read as floating */
+  content: ""; position: absolute; left: 14%; right: 14%; bottom: -18%; height: 12%;
+  background: radial-gradient(ellipse at center, rgba(232, 50, 44, 0.32), transparent 70%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+.avatar-float {
+  position: relative; width: 100%; height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
+  background: #1a0508;
+  box-shadow:
+    0 0 0 1px rgba(255, 130, 110, 0.22),
+    0 0 1.1em 0.05em rgba(232, 50, 44, 0.38),
+    0 0 4.2em 0.5em rgba(138, 10, 31, 0.4);
+  animation: bob 7s ease-in-out infinite;
+}
+.avatar-img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: 56% 46%;
+  transform: translate(-4%, 5%) scale(1.5);
+  transform-origin: 51% 45%;
+  animation: surface 52s ease-in-out infinite alternate;
+  filter: saturate(1.08) contrast(1.04);
+}
+.avatar-float::before {               /* sunlight from the right, limb darkening toward the lower left, thin atmosphere */
+  content: ""; position: absolute; inset: 0; z-index: 1; border-radius: 50%; pointer-events: none;
+  background:
+    radial-gradient(circle at 72% 24%, rgba(255, 196, 170, 0.15), transparent 36%),
+    radial-gradient(circle at 66% 32%, transparent 32%, rgba(5, 0, 3, 0.52) 68%, rgba(5, 0, 3, 0.92) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 140, 120, 0.18),
+    inset -0.3em 0.4em 1.1em rgba(0, 0, 0, 0.55),
+    inset 0.12em -0.12em 0.7em rgba(255, 90, 70, 0.28);
+}
+@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-1.2deg); } 50% { transform: translateY(-9px) rotate(1.2deg); } }
+@keyframes surface { from { transform: translate(-4%, 5%) scale(1.5); } to { transform: translate(2.5%, 5%) scale(1.5); } }
+@media (prefers-reduced-motion: reduce) {
+  .avatar-float, .avatar-img { animation: none; }
+  .avatar { transition: none; }
+}

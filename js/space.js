@@ -95,6 +95,49 @@ export async function createSpace(canvas, hooks = {}) {
   }
   const nearSide = new THREE.Vector3().fromBufferAttribute(posA, nearest).normalize();
 
+  // ---- starfield: a shell of points far behind everything, slowly turning ----------------------
+  const STAR_COUNT = 2600;
+  const starPos = new Float32Array(STAR_COUNT * 3), starCol = new Float32Array(STAR_COUNT * 3), starSeed = new Float32Array(STAR_COUNT * 2);
+  for (let i = 0; i < STAR_COUNT; i++) {
+    const u = Math.random() * 2 - 1, th = Math.random() * TAU, r = Math.sqrt(1 - u * u);
+    starPos.set([r * Math.cos(th) * 4200, u * 4200, r * Math.sin(th) * 4200], i * 3);
+    const m = Math.random() ** 6;                          // power law: many faint, few bright
+    const t = Math.random();
+    const tint = t < 0.3 ? [0.75, 0.82, 1] : t < 0.8 ? [1, 0.97, 0.93] : [1, 0.78, 0.6];
+    starCol.set(tint.map((c) => c * (0.25 + 0.75 * m)), i * 3);
+    starSeed.set([m, Math.random() * TAU], i * 2);
+  }
+  const starGeo = new THREE.BufferGeometry();
+  starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+  starGeo.setAttribute("color", new THREE.BufferAttribute(starCol, 3));
+  starGeo.setAttribute("seed", new THREE.BufferAttribute(starSeed, 2));
+  const starMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uScale: { value: 1 } },
+    vertexShader: `
+      attribute vec3 color; attribute vec2 seed;
+      uniform float uTime; uniform float uScale;
+      varying vec3 vCol; varying float vTw;
+      void main() {
+        vCol = color;
+        vTw = 0.8 + 0.2 * sin(uTime * (0.8 + seed.x * 3.0) + seed.y);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = (1.3 + 3.2 * seed.x) * uScale;
+      }`,
+    fragmentShader: `
+      varying vec3 vCol; varying float vTw;
+      void main() {
+        vec2 p = gl_PointCoord - 0.5;
+        float d = length(p) * 2.0;
+        float a = smoothstep(1.0, 0.0, d);
+        gl_FragColor = vec4(vCol * vTw * a * a, 1.0);
+      }`,
+    blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, transparent: true,
+  });
+  const stars = new THREE.Points(starGeo, starMat);
+  stars.renderOrder = -10;
+  stars.frustumCulled = false;
+  scene.add(stars);
+
   // ---- physics ------------------------------------------------------------------------------
   const world = buildSystem(SYSTEM);
   const { sim, sun: sunBody, moon } = world;
@@ -283,6 +326,7 @@ export async function createSpace(canvas, hooks = {}) {
   function setSize() {
     const pr = Math.max(0.5, dpr * qScale);
     renderer.setPixelRatio(pr);
+    starMat.uniforms.uScale.value = pr;
     renderer.setSize(cssW, cssH, false);
   }
 
@@ -354,6 +398,9 @@ export async function createSpace(canvas, hooks = {}) {
     while (acc >= SUBSTEP && n++ < 600) { sim.step(SUBSTEP); moon.step(SUBSTEP); acc -= SUBSTEP; }
     if (n >= 600) acc = 0;
     simT += dtSim;
+    starMat.uniforms.uTime.value += dtReal;
+    stars.rotation.y += dtReal * 0.004;
+    stars.rotation.x += dtReal * 0.0007;
     syncScene(dtSim);
     updateLightUniforms();
     if (showTrails) updateTrails(dtSim);
