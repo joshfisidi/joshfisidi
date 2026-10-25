@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Josh Fisidi</title>
+<meta name="description" content="Josh Fisidi: music, apps, games, design, books and story. A red wormhole with a physically simulated solar system far behind it.">
+<meta name="theme-color" content="#070204">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Josh Fisidi">
+<meta property="og:description" content="Music, apps, games, design, books and story, through a wormhole.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070204'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23ff4a3d' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23a80f2a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true"></div>
+<canvas id="space" aria-hidden="true"></canvas>
+<canvas id="field" aria-hidden="true"></canvas>
+
+<main class="stage">
+  <nav id="portal" aria-label="Explore">
+    <ul class="portal-list">
+      <li><h1 class="portal-heading"><a class="portal-link" href="#music">MUSIC</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="#apps">APPS</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="#games">GAMES</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="#design">DESIGN</a></h1></li>
+      <li><h1 class="portal-heading"><a class="portal-link" href="#books">BOOKS</a></h1></li>
+      <li>
+        <span class="portal-divider" aria-hidden="true">-</span>
+        <h1 class="portal-heading"><a class="portal-link" href="#story">STORY</a></h1>
+      </li>
+    </ul>
+  </nav>
+
+  <section id="room" class="room" aria-labelledby="room-title" hidden>
+    <p class="room-index"><span id="room-pos">01</span> / 06</p>
+    <h2 id="room-title" class="room-title" tabindex="-1">MUSIC</h2>
+    <p id="room-desc" class="room-desc"></p>
+    <ul id="room-lines" class="room-lines" hidden></ul>
+    <ul id="room-links" class="room-links" hidden></ul>
+    <p id="room-note" class="room-note">Nothing published here yet.</p>
+    <div class="room-nav">
+      <a class="room-link" href="#">← Portal</a>
+      <a class="room-link" id="room-next" href="#apps">APPS →</a>
+    </div>
+  </section>
+</main>
+
+<div class="controls">
+  <fieldset class="palette">
+    <legend class="sr">Palette</legend>
+    <label class="swatch" title="Crimson">
+      <input type="radio" name="palette" id="pal-crimson" value="crimson" checked>
+      <span class="chip" style="--s1:#ff4a3d;--s2:#a80f2a"></span><span class="sr">Crimson</span>
+    </label>
+    <label class="swatch" title="Oxblood">
+      <input type="radio" name="palette" id="pal-oxblood" value="oxblood">
+      <span class="chip" style="--s1:#d02a3a;--s2:#2b0409"></span><span class="sr">Oxblood</span>
+    </label>
+    <label class="swatch" title="Ember">
+      <input type="radio" name="palette" id="pal-ember" value="ember">
+      <span class="chip" style="--s1:#ffa05a;--s2:#d4301e"></span><span class="sr">Ember</span>
+    </label>
+  </fieldset>
+  <span class="sep" aria-hidden="true"></span>
+  <div class="motion">
+    <label for="orbits">Orbits</label>
+    <button id="orbits" class="switch" type="button" role="switch" aria-label="Orbit trails" aria-checked="true"><span class="thumb"></span></button>
+  </div>
+  <span class="sep" aria-hidden="true"></span>
+  <div class="motion">
+    <label for="motion">Motion</label>
+    <button id="motion" class="switch" type="button" role="switch" aria-label="Motion" aria-checked="true"><span class="thumb"></span></button>
+  </div>
+</div>
+
+<p id="readout" class="readout">Starting renderer</p>
+
+<footer class="site-foot">
+  <a href="https://github.com/joshfisidi" rel="noopener">GitHub</a>
+  <a href="https://x.com/joshfisidi" rel="noopener">X</a>
+</footer>
+
+<noscript><p class="nojs">This site needs JavaScript for its WebGL scene. GitHub: github.com/joshfisidi · X: x.com/joshfisidi</p></noscript>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
