@@ -1,30 +1,20 @@
 // Interface: the portal menu over two canvases (far system underneath, wormhole on top), and the STORY sequence.
-import { STORY, PALETTES, DEFAULT_PALETTE } from "./config.js";
+import { STORY, PALETTE } from "./config.js";
 import { createRenderer } from "./wormhole.js";
 import { createSpace } from "./space.js";
 
 const POINTER_PX = 6;
 const rootStyle = document.documentElement.style;
 
-const store = {
-  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
-  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
-};
-
 const $ = (id) => document.getElementById(id);
 const canvas = $("field"), spaceCanvas = $("space");
 const nav = $("portal"), story = $("story-room"), storyText = $("story-text"), storyTitle = $("story-title");
-const sw = $("motion"), orbitsSw = $("orbits"), readout = $("readout");
+const readout = $("readout");
 const links = [...nav.querySelectorAll("a")];
 const storyLink = nav.querySelector('a[href="#story"]');
 const rm = matchMedia("(prefers-reduced-motion: reduce)");
 
 let renderer = null, space = null, failed = null, spaceFailed = false;
-let pref = store.get("wh.motion");
-if (!["system", "on", "off"].includes(pref)) pref = "system";
-let palKey = store.get("wh.palette");
-if (!PALETTES[palKey]) palKey = DEFAULT_PALETTE;
-let orbitsOn = store.get("wh.orbits") !== "off";
 
 // wormhole aperture state, tracked here so a sequence interrupted halfway can resume from where it was
 const wh = { close: 0, x: 0, y: 0, warp: 0 };
@@ -37,7 +27,7 @@ function setWH(o) {
 
 // portal -> entering -> story -> leaving -> portal
 let phase = "portal";
-const motionOn = () => pref === "on" || (pref === "system" && !rm.matches);
+const motionOn = () => !rm.matches;
 const spaceWanted = () => phase === "portal" || phase === "leaving";
 
 function updateReadout() {
@@ -60,64 +50,34 @@ function updateReadout() {
 
 function syncMotion() {
   const on = motionOn() && !document.hidden;
-  sw.setAttribute("aria-checked", String(motionOn()));
   if (!motionOn()) { renderer?.setPointer(0, 0); space?.setPointer(0, 0); }
   renderer?.setRunning(on);
   space?.setRunning(on && spaceWanted());
   updateReadout();
 }
 
-sw.addEventListener("click", () => {
-  const next = !motionOn();
-  pref = next === !rm.matches ? "system" : next ? "on" : "off";   // matching the OS means "follow the OS"
-  store.set("wh.motion", pref);
-  syncMotion();
-});
 rm.addEventListener("change", syncMotion);
 document.addEventListener("visibilitychange", syncMotion);
 
-function syncOrbits() {
-  orbitsSw.setAttribute("aria-checked", String(orbitsOn));
-  space?.setTrails(orbitsOn);
-}
-orbitsSw.addEventListener("click", () => {
-  orbitsOn = !orbitsOn;
-  store.set("wh.orbits", orbitsOn ? "on" : "off");
-  syncOrbits();
-});
-syncOrbits();
+for (const [k, v] of Object.entries(PALETTE)) rootStyle.setProperty(`--${k}`, v);
 
-function applyPalette(key) {
-  palKey = key;
-  const p = PALETTES[key], s = document.documentElement.style;
-  s.setProperty("--bg", p.bg);
-  s.setProperty("--a", p.a);
-  s.setProperty("--b", p.b);
-  s.setProperty("--c", p.c);
-  $("pal-" + key).checked = true;
-  renderer?.setPalette(p);
-  space?.setBackground(p.bg);
-}
-document.querySelectorAll('input[name="palette"]').forEach((input) => {
-  input.addEventListener("change", () => { applyPalette(input.value); store.set("wh.palette", input.value); });
-});
-applyPalette(palKey);
-
-// the portrait takes whatever room is free above the menu; it steps aside on short screens
-function updateAvatar() {
-  const free = (canvas.clientHeight - nav.offsetHeight) / 2 - 44;
-  const size = Math.min(168, free, canvas.clientWidth * 0.3);
-  nav.classList.toggle("no-avatar", size < 64);
-  if (size >= 64) nav.style.setProperty("--av", `${Math.round(size)}px`);
+// the opening's corners follow the screen's: notch / island phones round hardest, other phones less, desktop barely
+function deviceCorner() {
+  const probe = Object.assign(document.createElement("div"), { style: "position:fixed;visibility:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)" });
+  document.body.append(probe);
+  const cs = getComputedStyle(probe);
+  const inset = Math.max(...["Top", "Right", "Bottom", "Left"].map((s) => parseFloat(cs["padding" + s]) || 0));
+  probe.remove();
+  const S = Math.min(screen.width, screen.height) || Math.min(innerWidth, innerHeight);
+  if (inset >= 20) return Math.min(56, Math.max(38, 0.14 * S));
+  return matchMedia("(pointer: coarse)").matches ? 0.09 * S : 12;
 }
 
-// band from the measured size of the menu in the opening, clamped to 5–16 % of the short side
+// a thin frame: 3.5 % of the short side, 12–28 px
 function updateBand() {
-  updateAvatar();
   if (!renderer || phase !== "portal") return;
-  const w = canvas.clientWidth, h = canvas.clientHeight, S = Math.min(w, h);
-  const fit = Math.min(w - nav.offsetWidth, h - nav.offsetHeight) / 2 - 24;
-  renderer.setBand(Math.min(0.16 * S, Math.max(Math.max(18, 0.05 * S), fit)));
+  renderer.setBand(Math.min(28, Math.max(12, 0.035 * Math.min(canvas.clientWidth, canvas.clientHeight))));
+  renderer.setRadius(deviceCorner());
 }
 
 const ro = new ResizeObserver(() => {
@@ -132,12 +92,9 @@ addEventListener("pointermove", (e) => {
   const px = -(e.clientX / innerWidth - 0.5) * 2 * POINTER_PX, py = (e.clientY / innerHeight - 0.5) * 2 * POINTER_PX;
   renderer?.setPointer(px, py);
   space?.setPointer(px, py);
-  rootStyle.setProperty("--mx", (-px / POINTER_PX).toFixed(3));
-  rootStyle.setProperty("--my", (py / POINTER_PX).toFixed(3));
 }, { passive: true });
 document.documentElement.addEventListener("pointerleave", () => {
   renderer?.setPointer(0, 0); space?.setPointer(0, 0);
-  rootStyle.setProperty("--mx", "0"); rootStyle.setProperty("--my", "0");
 });
 
 /* ---------- story: the text crawls up and away, like an opening crawl ---------- */
@@ -236,10 +193,10 @@ const frames = (ms, fn, id) => new Promise((resolve) => {
   requestAnimationFrame(step);
 });
 
-// top-down order: the portrait, the five links, then the divider that sits above STORY
+// top-down order: the five links, then the divider that sits above STORY
 const cascadeTargets = () => {
   const lis = [...nav.querySelectorAll(".portal-list > li")];
-  return [nav.querySelector(".avatar"), ...lis.slice(0, -1), lis.at(-1).querySelector(".portal-divider")];
+  return [...lis.slice(0, -1), lis.at(-1).querySelector(".portal-divider")];
 };
 
 function resetPortal() {
@@ -401,7 +358,7 @@ async function init() {
     canvas.hidden = true;
     failed = "No WebGL2 · static backdrop";
   } else {
-    renderer.setPalette(PALETTES[palKey]);
+    renderer.setPalette(PALETTE);
     renderer.resize(canvas.clientWidth, canvas.clientHeight);
     updateBand();
   }
@@ -414,8 +371,7 @@ async function init() {
       onFirstFrame() { spaceCanvas.classList.add("is-live"); },
       onStats: updateReadout,
     });
-    space.setBackground(PALETTES[palKey].bg);
-    space.setTrails(orbitsOn);
+    space.setBackground(PALETTE.bg);
     space.resize(spaceCanvas.clientWidth, spaceCanvas.clientHeight);
   } catch (err) {
     console.warn(err);

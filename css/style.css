@@ -125,60 +125,6 @@ body {
 .room-link:is(:hover, :focus-visible) { color: var(--ink-hi); border-color: var(--b); }
 .room-link:focus-visible { outline: 2px solid var(--b); outline-offset: 4px; }
 
-/* controls */
-.controls {
-  position: fixed; z-index: 20;
-  top: calc(env(safe-area-inset-top, 0px) + 14px);
-  right: calc(env(safe-area-inset-right, 0px) + 14px);
-  display: flex; align-items: center; gap: 14px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: color-mix(in oklab, var(--bg) 72%, transparent);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  font: 500 11px/1 var(--mono);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-}
-.palette { display: flex; gap: 6px; margin: 0; padding: 0; border: 0; }
-.swatch { position: relative; display: grid; place-items: center; width: 24px; height: 24px; cursor: pointer; }
-.swatch input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
-.chip {
-  width: 14px; height: 14px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--s1), var(--s2));
-  box-shadow: 0 0 0 1px var(--line);
-  transition: box-shadow 0.15s;
-}
-.swatch input:checked + .chip { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--ink); }
-.swatch input:focus-visible + .chip { outline: 2px solid var(--b); outline-offset: 4px; }
-.sep { width: 1px; height: 16px; background: var(--line); }
-.motion { display: flex; align-items: center; gap: 10px; }
-.motion label { cursor: pointer; }
-.switch {
-  position: relative; flex: none;
-  width: 34px; height: 20px; padding: 0;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: color-mix(in oklab, var(--ink) 8%, transparent);
-  cursor: pointer;
-  transition: background 0.18s, border-color 0.18s;
-}
-.switch::before { content: ""; position: absolute; inset: -12px -6px; }
-.switch .thumb {
-  position: absolute; top: 2px; left: 2px;
-  width: 14px; height: 14px; border-radius: 50%;
-  background: var(--ink-dim);
-  transition: transform 0.18s ease-out, background 0.18s;
-}
-.switch[aria-checked="true"] {
-  background: color-mix(in oklab, var(--b) 34%, transparent);
-  border-color: color-mix(in oklab, var(--b) 60%, transparent);
-}
-.switch[aria-checked="true"] .thumb { transform: translateX(14px); background: var(--ink); }
-.switch:focus-visible { outline: 2px solid var(--b); outline-offset: 3px; }
-
 .readout {
   position: fixed; z-index: 20;
   left: calc(env(safe-area-inset-left, 0px) + 16px);
@@ -198,7 +144,7 @@ body {
   .portal-link:is(:hover, :focus-visible) { transform: translateX(0.08em); }
 }
 @media (prefers-reduced-motion: reduce) {
-  #field, #space, .switch, .switch .thumb { transition: none; }
+  #field, #space { transition: none; }
 }
 
 /* story: black screen, the text crawls up and away into the distance */
@@ -266,64 +212,7 @@ body {
 .site-foot a:is(:hover, :focus-visible) { color: var(--ink-hi); }
 .site-foot a:focus-visible { outline: 2px solid var(--b); outline-offset: 2px; }
 @media (max-width: 560px) {
-  .controls { gap: 10px; padding: 6px 10px; letter-spacing: 0.1em; }
-  .controls .motion label { display: none; }
   .readout { display: none; }
   .site-foot { left: calc(env(safe-area-inset-left, 0px) + 12px); right: auto; }
 }
 .nojs { position: fixed; inset: auto 16px 16px; z-index: 30; font: 12px/1.5 var(--mono); color: var(--ink-dim); }
-
-/* portrait: a circle floating above the menu, lit like the planets behind it, but still a photograph */
-#portal { position: relative; }
-.avatar {
-  --av: 120px;                       /* set from script to fit the free space above the menu */
-  position: absolute; left: 50%; bottom: 100%;
-  width: var(--av); height: var(--av);
-  margin: 0 0 clamp(10px, 2.2svh, 24px) calc(var(--av) / -2);
-  transform: translate(calc(var(--mx, 0) * -8px), calc(var(--my, 0) * -6px));
-  transition: transform 0.35s ease-out;
-  pointer-events: none;
-}
-#portal.no-avatar .avatar { display: none; }
-.avatar::after {                      /* soft glow on the "ground" below it, to read as floating */
-  content: ""; position: absolute; left: 14%; right: 14%; bottom: -18%; height: 12%;
-  background: radial-gradient(ellipse at center, rgba(232, 50, 44, 0.32), transparent 70%);
-  filter: blur(6px);
-  pointer-events: none;
-}
-.avatar-float {
-  position: relative; width: 100%; height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  isolation: isolate;
-  background: #1a0508;
-  box-shadow:
-    0 0 0 1px rgba(255, 130, 110, 0.22),
-    0 0 1.1em 0.05em rgba(232, 50, 44, 0.38),
-    0 0 4.2em 0.5em rgba(138, 10, 31, 0.4);
-  animation: bob 7s ease-in-out infinite;
-}
-.avatar-img {
-  display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: 56% 46%;
-  transform: translate(-4%, 5%) scale(1.5);
-  transform-origin: 51% 45%;
-  animation: surface 52s ease-in-out infinite alternate;
-  filter: saturate(1.08) contrast(1.04);
-}
-.avatar-float::before {               /* sunlight from the right, limb darkening toward the lower left, thin atmosphere */
-  content: ""; position: absolute; inset: 0; z-index: 1; border-radius: 50%; pointer-events: none;
-  background:
-    radial-gradient(circle at 72% 24%, rgba(255, 196, 170, 0.15), transparent 36%),
-    radial-gradient(circle at 66% 32%, transparent 32%, rgba(5, 0, 3, 0.52) 68%, rgba(5, 0, 3, 0.92) 100%);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 140, 120, 0.18),
-    inset -0.3em 0.4em 1.1em rgba(0, 0, 0, 0.55),
-    inset 0.12em -0.12em 0.7em rgba(255, 90, 70, 0.28);
-}
-@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-1.2deg); } 50% { transform: translateY(-9px) rotate(1.2deg); } }
-@keyframes surface { from { transform: translate(-4%, 5%) scale(1.5); } to { transform: translate(2.5%, 5%) scale(1.5); } }
-@media (prefers-reduced-motion: reduce) {
-  .avatar-float, .avatar-img { animation: none; }
-  .avatar { transition: none; }
-}

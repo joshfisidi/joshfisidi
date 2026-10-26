@@ -25,7 +25,8 @@ const FS = `#version 300 es
 precision highp float;
 uniform vec2 uScale;     // drawing-buffer px per CSS px (x, y)
 uniform vec2 uView;      // CSS px
-uniform float uBand;     // CSS px
+uniform float uBand;     // CSS px: thickness of the frame
+uniform float uRadius;   // CSS px: the screen's own corner radius
 uniform float uClose;    // 0 open .. 1 the opening has closed and the tunnel fills the screen
 uniform vec2 uCenter;    // CSS px offset of the opening's centre (x right, y up)
 uniform vec2 uPointer;   // CSS px field offset
@@ -111,7 +112,7 @@ return s;
 void main() {
 vec2 q = gl_FragCoord.xy / uScale - 0.5 * uView - uCenter;
 vec2 inner = mix(max(0.5 * uView - uBand, vec2(4.0)), vec2(2.0), uClose);
-float radius = min(uBand * 1.25, min(inner.x, inner.y) * 0.5);
+float radius = min(max(uRadius - uBand, 2.0), min(inner.x, inner.y) * 0.5);   // concentric with the screen corner
 
 // 1. cheap mask first: the opening gets only the starfield, no tunnel noise
 float d = sdRoundRect(q, inner, radius);
@@ -124,7 +125,9 @@ if (d <= 0.0 && uClose < 0.995) {
 
 // 2. tunnel coordinates (field shifted by pointer, mask stays fixed)
 vec2 qf = q - uPointer;
-float u = max(sdRoundRect(qf, inner, radius), 0.0) / uBand;   // 0 throat .. ~1 screen edge
+float bandN = mix(uBand, 0.2 * min(uView.x, uView.y), uClose);   // the tunnel keeps its depth once the frame has closed
+float dpx = max(sdRoundRect(qf, inner, radius), 0.0);          // CSS px from the edge
+float u = dpx / bandN;                                         // 0 throat .. ~1 screen edge
 float z = 1.0 / (u + 0.16);                                    // perspective depth
 
 float th = atan(qf.y / inner.y, qf.x / inner.x) + TAU * uSpin + 0.45 * z;
@@ -146,15 +149,14 @@ float s = fract(z * 0.5 + uTravel * 6.0 + rnd * 13.0);
 float streak = step(0.9, rnd) * lane * smoothstep(0.84, 0.95, s) * (1.0 - smoothstep(0.95, 1.0, s));
 
 // 4. compose: feathered from the throat, restrained glow
-float mask = smoothstep(0.0, 0.32, u);
+float mask = clamp(dpx / 1.5, 0.0, 1.0);                      // hard edge, 1.5 px of anti-aliasing
 float body = mask * (0.55 + 0.45 * smoothstep(0.1, 0.9, u));
 vec3 L = vec3(0.0);
 L += mix(uA, uC, smoothstep(0.25, 0.75, hue)) * smoothstep(0.32, 0.9, neb) * 0.9 * body;
 L += mix(uB, uC, hue) * fil * 0.55 * body;
 L += mix(uB, vec3(1.0), 0.35) * streak * 0.9 * mask;
-L += uB * 0.22 * exp(-pow((u - 0.035) / 0.014, 2.0));         // thin rim at the opening
+L += uB * 0.5 * exp(-pow((dpx - 1.5) / 1.2, 2.0));             // crisp rim line at the opening
 L += uA * 0.12 * mask;                                          // depth haze
-if (u < 0.32) L += stars(q) * (1.0 - mask);                     // stars continue under the feather
 
 // premultiplied: the tunnel's own background colour only counts where it is opaque (alpha = mask)
 vec3 col = (1.0 - exp(-L * 1.35)) + uBg * mask;
@@ -173,7 +175,7 @@ export function createRenderer(canvas, hooks) {
 
   let prog = null, vao = null;
   const U = {};
-  let cssW = 1, cssH = 1, band = 80, quality = "medium", pal = null;
+  let cssW = 1, cssH = 1, band = 24, radius = 12, quality = "medium", pal = null;
   let travel = 0, spin = 0, boost = 0, warp = 0, close = 0;
   const center = [0, 0];
   const drift = [0, 0];
@@ -207,7 +209,7 @@ export function createRenderer(canvas, hooks) {
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS) && !gl.isContextLost()) {
       throw new Error(gl.getProgramInfoLog(prog) || "program link failed");
     }
-    for (const k of ["uScale", "uView", "uBand", "uClose", "uCenter", "uPointer", "uTravel", "uSpin", "uOct", "uDrift", "uBg", "uA", "uB", "uC"]) {
+    for (const k of ["uScale", "uView", "uBand", "uRadius", "uClose", "uCenter", "uPointer", "uTravel", "uSpin", "uOct", "uDrift", "uBg", "uA", "uB", "uC"]) {
       U[k] = gl.getUniformLocation(prog, k);
     }
     vao = gl.createVertexArray();
@@ -222,6 +224,7 @@ export function createRenderer(canvas, hooks) {
     gl.uniform2f(U.uScale, gl.drawingBufferWidth / cssW, gl.drawingBufferHeight / cssH);
     gl.uniform2f(U.uView, cssW, cssH);
     gl.uniform1f(U.uBand, band);
+    gl.uniform1f(U.uRadius, radius);
     gl.uniform1f(U.uClose, close);
     gl.uniform2f(U.uCenter, center[0], center[1]);
     gl.uniform2f(U.uPointer, pC[0], pC[1]);
@@ -366,6 +369,7 @@ export function createRenderer(canvas, hooks) {
 
   return {
     resize(w, h) { cssW = Math.max(1, w); cssH = Math.max(1, h); applySize(); },
+    setRadius(px) { if (Math.abs(px - radius) > 0.5) { radius = px; if (!running) draw(); } },
     setBand(px) { if (Math.abs(px - band) > 0.5) { band = px; if (!running) draw(); } },
     setPointer(x, y) { pT[0] = x; pT[1] = y; if (!running) { pC[0] = x; pC[1] = y; } },
     setPalette(p) { pal = { bg: rgb(p.bg), a: rgb(p.a), b: rgb(p.b), c: rgb(p.c) }; if (!running) draw(); },

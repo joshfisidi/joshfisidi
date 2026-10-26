@@ -13,13 +13,8 @@ export const STORY = [
   "**The defining achievement isn't behind Josh. It's what everything so far has been preparing Josh to create.**",
 ];
 
-// css custom properties + shader colours. Default is deep red.
-export const PALETTES = {
-  crimson: { bg: "#060103", a: "#3a040d", b: "#e8322c", c: "#8a0a1f" },
-  oxblood: { bg: "#040102", a: "#240308", b: "#c42535", c: "#580813" },
-  ember:   { bg: "#0a0504", a: "#6e1608", b: "#ffa05a", c: "#d4301e" },
-};
-export const DEFAULT_PALETTE = "crimson";
+// shader colours and css custom properties: deep red only
+export const PALETTE = { bg: "#060103", a: "#3a040d", b: "#e8322c", c: "#8a0a1f" };
 
 // ---- the far system -------------------------------------------------------------------------
 // Distances (scene units) are compressed, radii inflated; periods are NOT set by hand: they follow from the
@@ -43,8 +38,8 @@ export const SYSTEM = {
   ],
   moon: { a: 27, inc: 5.1, radius: 3.0, periodsPerYear: 13.37 },
   // where the system sits relative to the camera: depth far down -z, plane tipped toward the viewer
-  distance: 900,
-  offset: [200, 55],
+  distance: 3600,
+  offset: [800, 220],
   tilt: 36,     // degrees between the orbital normal and the view axis (0 = face-on, 90 = edge-on)
   roll: -14,
 };
