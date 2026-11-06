@@ -33,6 +33,7 @@ uniform vec2 uPointer;   // CSS px field offset
 uniform float uTravel;   // [0,1) phase
 uniform float uSpin;     // [0,1) phase
 uniform float uOct;
+uniform float uGlow;
 uniform vec2 uDrift;     // [0,1) star drift phases (x, y)
 uniform vec3 uBg, uA, uB, uC;
 out vec4 outColor;
@@ -152,7 +153,7 @@ void main() {
   L += uA * 0.12 * mask;                                          // depth haze
   if (u < 0.32) L += stars(q) * (1.0 - mask);                     // stars continue under the feather
 
-  vec3 col = uBg + (1.0 - exp(-L * 1.35));
+  vec3 col = uBg + (1.0 - exp(-L * (1.35 + 0.28 * uGlow)));
   col += (hash(vec3(gl_FragCoord.xy, 1.0)) - 0.5) / 255.0;        // dither against banding
   outColor = vec4(col, 1.0);
 }`;
@@ -168,7 +169,7 @@ void main() {
     let prog = null, vao = null;
     const U = {};
     let cssW = 1, cssH = 1, band = 80, quality = "medium", pal = null;
-    let travel = 0, spin = 0, boost = 0;
+    let travel = 0, spin = 0, boost = 0, glowTarget = 0, glow = 0;
     const drift = [0, 0];
     const pT = [0, 0], pC = [0, 0];
     let running = false, wantRun = false, lost = false, first = false, raf = 0;
@@ -200,7 +201,7 @@ void main() {
       if (!gl.getProgramParameter(prog, gl.LINK_STATUS) && !gl.isContextLost()) {
         throw new Error(gl.getProgramInfoLog(prog) || "program link failed");
       }
-      for (const k of ["uScale", "uView", "uBand", "uPointer", "uTravel", "uSpin", "uOct", "uDrift", "uBg", "uA", "uB", "uC"]) {
+      for (const k of ["uScale", "uView", "uBand", "uPointer", "uTravel", "uSpin", "uOct", "uGlow", "uDrift", "uBg", "uA", "uB", "uC"]) {
         U[k] = gl.getUniformLocation(prog, k);
       }
       vao = gl.createVertexArray();
@@ -219,6 +220,7 @@ void main() {
       gl.uniform1f(U.uTravel, travel);
       gl.uniform1f(U.uSpin, spin);
       gl.uniform1f(U.uOct, TIERS[quality].oct);
+      gl.uniform1f(U.uGlow, glow);
       gl.uniform2f(U.uDrift, drift[0], drift[1]);
       gl.uniform3fv(U.uBg, pal.bg);
       gl.uniform3fv(U.uA, pal.a);
@@ -273,6 +275,7 @@ void main() {
 
     function step(dt) {
       boost *= Math.exp(-dt * 1.8);
+      glow += (glowTarget - glow) * (1 - Math.exp(-dt * 5));
       travel = (travel + dt * TRAVEL * (1 + 4 * boost)) % 1;   // float64 phases, wrapped
       spin = (spin + dt * SPIN * (1 + boost)) % 1;
       drift[0] = (drift[0] + dt * DRIFT_X * (1 + 4 * boost)) % 1;
@@ -359,6 +362,7 @@ void main() {
       setBand(px) { if (Math.abs(px - band) > 0.5) { band = px; if (!running) draw(); } },
       setPointer(x, y) { pT[0] = x; pT[1] = y; if (!running) { pC[0] = x; pC[1] = y; } },
       setPalette(p) { pal = { bg: rgb(p.bg), a: rgb(p.a), b: rgb(p.b), c: rgb(p.c) }; if (!running) draw(); },
+      setEngaged(on) { glowTarget = on ? 1 : 0; if (!running) { glow = glowTarget; draw(); } },
       setRunning,
       kick() { if (running) boost = 1; },
       stats() { return { quality, dpr: gl.drawingBufferWidth / cssW, fps, running }; },
@@ -391,7 +395,7 @@ void main() {
 
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   const sync = () => { renderer?.setRunning(!document.hidden && !motion.matches); updateReadout(); };
-  motion.addEventListener("change", sync);   // always on; only a hidden tab stops the loop
+  motion.addEventListener("change", sync);
   document.addEventListener("visibilitychange", sync);
 
   // band depends on the viewport only, so text size or zoom never changes the vortex
@@ -410,6 +414,12 @@ void main() {
   document.documentElement.addEventListener("pointerleave", () => renderer?.setPointer(0, 0));
 
   /* ---------- navigation: plain external links; feedback never delays them ---------- */
+  function updateGlow() {
+    renderer?.setEngaged(links.some((link) => link.matches(":hover, :focus-visible")));
+  }
+  for (const event of ["pointerover", "pointerout", "focusin", "focusout"]) {
+    nav.addEventListener(event, () => queueMicrotask(updateGlow));
+  }
   nav.addEventListener("click", (e) => { if (e.target.closest(".portal-link")) renderer?.kick(); });
   nav.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
@@ -445,6 +455,7 @@ void main() {
     renderer.setPalette(PALETTE);
     fit();
     sync();
+    updateGlow();
   }
   requestAnimationFrame(() => requestAnimationFrame(() => {
     if ("requestIdleCallback" in window) requestIdleCallback(init, { timeout: 1500 });
