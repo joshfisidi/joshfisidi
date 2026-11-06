@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "joshfisidi-portfolio",
+  "account_id": "2bb029e00eab0e0e1a0eb6afb73baa21",
+  "workers_dev": false,
+  "preview_urls": false,
+  "compatibility_date": "2026-11-06",
+  "assets": { "directory": "./dist" },
+  "routes": [
+    { "pattern": "joshfisidi.com", "custom_domain": true },
+    { "pattern": "www.joshfisidi.com", "custom_domain": true }
+  ]
+}

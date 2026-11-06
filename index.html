@@ -4,59 +4,163 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Josh Fisidi</title>
-<meta name="description" content="Josh Fisidi: music, apps, games, design, books and story. A red wormhole with a physically simulated solar system far behind it.">
-<meta name="theme-color" content="#070204">
-<meta name="color-scheme" content="dark">
+<meta name="description" content="Music, apps, games and code by Josh Fisidi.">
+<meta name="theme-color" content="#060304">
+<link rel="canonical" href="https://joshfisidi.com/">
 <meta property="og:title" content="Josh Fisidi">
-<meta property="og:description" content="Music, apps, games, design, books and story, through a wormhole.">
+<meta property="og:description" content="Music, apps, games and code.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070204'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23ff4a3d' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23a80f2a'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<meta property="og:url" content="https://joshfisidi.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23060304'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23c41e2c' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+/* layout: one fixed perimeter field (canvas), one centred, left-aligned column on top */
+:root {
+  --bg: #060304;
+  --ink: #eceef5;
+  --ink-hi: #ffffff;
+  --ink-dim: rgba(236, 238, 245, 0.56);
+  --line: rgba(236, 238, 245, 0.16);
+  --a: #3a060d;   /* oxblood depth */
+  --b: #c41e2c;   /* crimson filament */
+  --c: #7d0c1a;   /* deep red */
+  --display: "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--display);
+  -webkit-font-smoothing: antialiased;
+}
+
+.sr {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* layer 0: static backdrop, visible before WebGL and whenever it fails */
+.backdrop {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 56% at 50% 50%, var(--bg) 58%, transparent 100%),
+    conic-gradient(from 200deg at 50% 50%,
+      color-mix(in oklab, var(--a) 70%, var(--bg)),
+      color-mix(in oklab, var(--c) 45%, var(--bg)),
+      color-mix(in oklab, var(--a) 70%, var(--bg)),
+      color-mix(in oklab, var(--b) 40%, var(--bg)),
+      color-mix(in oklab, var(--a) 70%, var(--bg)));
+}
+.backdrop::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+/* layer 1: wormhole canvas */
+#field {
+  position: fixed; inset: 0; z-index: 1;
+  display: block; width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.9s ease-out;
+}
+#field.is-live { opacity: 1; }
+
+/* layer 10: interface */
+.stage {
+  position: relative; z-index: 10;
+  box-sizing: border-box;
+  min-height: 100%;
+  display: grid; place-items: center;
+  padding-block: clamp(40px, 9svh, 96px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.stage > * { grid-area: 1 / 1; min-width: 0; }
+
+.portal-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; justify-items: center; text-align: center;
+  gap: clamp(0px, 0.7svh, 8px);
+}
+.portal-list > li { display: grid; justify-items: center; }
+/* viewport-only sizing: the longest label (MUSIC/GAMES) always fits inside the fixed 14vmin opening */
+.portal-heading {
+  margin: 0;
+  padding-left: 0.06em;   /* balances trailing letter-spacing so centring is optical, not off by one glyph gap */
+  font-size: clamp(1.5rem, min(7.2vw - 0.3rem, 7.5svh), 5rem);
+  font-weight: 500;
+  font-stretch: 112%;
+  line-height: 1.05;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.portal-link {
+  display: inline-flex; align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.15s, text-shadow 0.25s;
+}
+.portal-link:is(:hover, :focus-visible) {
+  color: var(--ink-hi);
+  text-shadow: 0 0 0.55em color-mix(in oklab, var(--b) 50%, transparent);
+}
+.portal-link:focus-visible { outline: 2px solid var(--b); outline-offset: 6px; border-radius: 2px; }
+.portal-divider {
+  display: block;
+  font-size: clamp(1.5rem, 0.6rem + min(3vw, 3.5svh), 2.75rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--ink-dim);
+  padding-block: 0.1em 0.05em;
+}
+
+.readout {
+  position: fixed; z-index: 20;
+  left: calc(env(safe-area-inset-left, 0px) + 16px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  margin: 0;
+  font: 500 10.5px/1.4 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-dim);
+  pointer-events: none;
+}
+@media (max-height: 520px) { .readout { display: none; } }
+
+
+.readout { display: none; }
+</style>
+<script src="/portal.js" defer></script>
 </head>
 <body>
-
 <div class="backdrop" aria-hidden="true"></div>
-<canvas id="space" aria-hidden="true"></canvas>
 <canvas id="field" aria-hidden="true"></canvas>
 
 <main class="stage">
+  <h1 class="sr">Josh Fisidi</h1>
   <nav id="portal" aria-label="Explore">
     <ul class="portal-list">
-      <li><h1 class="portal-heading"><a class="portal-link" href="https://yashguma.com" target="_blank" rel="noopener">MUSIC</a></h1></li>
-      <li><h1 class="portal-heading"><a class="portal-link" href="https://luminoise.app" target="_blank" rel="noopener">APPS</a></h1></li>
-      <li><h1 class="portal-heading"><a class="portal-link" href="https://fisidi.com/timeytower" target="_blank" rel="noopener">GAMES</a></h1></li>
-      <li><h1 class="portal-heading"><a class="portal-link" href="https://fisidi.com/design" target="_blank" rel="noopener">DESIGN</a></h1></li>
-      <li><h1 class="portal-heading"><a class="portal-link" href="https://ecclesiapublishing.com" target="_blank" rel="noopener">BOOKS</a></h1></li>
+      <li><h2 class="portal-heading"><a class="portal-link" href="https://yashguma.com">MUSIC</a></h2></li>
+      <li><h2 class="portal-heading"><a class="portal-link" href="https://fisidi.com/apps">APPS</a></h2></li>
+      <li><h2 class="portal-heading"><a class="portal-link" href="https://fisidi.com/games">GAMES</a></h2></li>
+      <li><h2 class="portal-heading"><a class="portal-link" href="https://github.com/joshfisidi">CODE</a></h2></li>
       <li>
         <span class="portal-divider" aria-hidden="true">-</span>
-        <h1 class="portal-heading"><a class="portal-link" href="#story">STORY</a></h1>
+        <h2 class="portal-heading"><a class="portal-link" href="https://x.com/joshfisidi">X</a></h2>
       </li>
     </ul>
   </nav>
-
-  <section id="story-room" class="story" aria-labelledby="story-title" hidden>
-    <div class="story-head">
-      <h2 id="story-title" class="story-title" tabindex="-1">STORY</h2>
-      <p id="story-hint" class="story-hint"></p>
-      <a class="room-link" id="story-back" href="#">← Portal</a>
-    </div>
-    <div id="story-view" class="story-view" aria-hidden="true"><div id="story-text" class="story-text"></div></div>
-    <div id="story-sr" class="sr"></div>
-  </section>
 </main>
 
-<p id="readout" class="readout">Starting renderer</p>
+<p id="readout" class="readout" hidden></p>
 
-<footer class="site-foot">
-  <a href="https://github.com/joshfisidi" rel="noopener">GitHub</a>
-  <a href="https://x.com/joshfisidi" rel="noopener">X</a>
-</footer>
-
-<noscript><p class="nojs">This site needs JavaScript for its WebGL scene. GitHub: github.com/joshfisidi · X: x.com/joshfisidi</p></noscript>
-
-<script type="module" src="js/main.js"></script>
 </body>
 </html>
