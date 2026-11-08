@@ -140,15 +140,14 @@ a:focus-visible { outline: 2px solid var(--b); outline-offset: 6px; border-radiu
 .portrait-gallery, .desktop-bio { display: none; }
 @media (min-width: 1200px) and (min-height: 650px) {
   .portal-shell {
-    width: min(78vw, 1400px);
+    width: min(84vw, 1600px);
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    column-gap: clamp(28px, 4vw, 76px);
+    column-gap: clamp(56px, 6vw, 112px);
   }
   .portrait-gallery, .desktop-bio { display: block; width: 100%; max-width: 320px; }
   .portrait-gallery { justify-self: end; }
   .desktop-bio { justify-self: start; text-align: left; }
-  .desktop-bio h1 { margin: 0 0 16px; font-size: clamp(24px, 2.4vw, 36px); font-weight: 500; }
   .desktop-bio p { margin: 0; font-size: 16px; line-height: 1.65; color: var(--ink-dim); }
   .portrait-halo { filter: drop-shadow(0 0 18px #a8183b80) drop-shadow(0 0 32px #66091a80); }
   .portrait-frame {
@@ -219,14 +218,13 @@ a:focus-visible { outline: 2px solid var(--b); outline-offset: 6px; border-radiu
       <li><h2 class="portal-heading"><a class="portal-link" href="https://fisidi.com/games">GAMES</a></h2></li>
       <li><h2 class="portal-heading"><a class="portal-link" href="https://github.com/joshfisidi">CODE</a></h2></li>
       <li>
-        <h2 class="portal-heading"><a class="portal-link" href="https://x.com/joshfisidi">X</a></h2>
+        <h2 class="portal-heading"><a id="social-link" class="portal-link" href="https://x.com/joshfisidi">X</a></h2>
       </li>
     </ul>
   </nav>
-  <section class="desktop-bio" aria-labelledby="bio-title">
-    <h1 id="bio-title">Josh Fisidi</h1>
-    <p>I build apps, games, and creative tools at Fisidi, and make music as Yashguma. I’m drawn to the places where sound, software, and play meet.</p>
-  </section>
+  <div class="desktop-bio">
+    <p>I build apps and study epigenetics.</p>
+  </div>
   </div>
 </main>
 
@@ -237,6 +235,16 @@ a:focus-visible { outline: 2px solid var(--b); outline-offset: 6px; border-radiu
 <p id="readout" class="readout" hidden></p>
 
 <script type="module">
+  const source = new URLSearchParams(location.search).get('utm_source')?.trim().toLowerCase();
+  const referrer = document.referrer ? new URL(document.referrer).hostname : '';
+  const fromInstagram = /(^|\.)instagram\.com$/.test(referrer);
+  const fromX = /(^|\.)(x\.com|twitter\.com|t\.co)$/.test(referrer);
+  if (fromX || (!fromInstagram && ['x', 'twitter', 't.co'].includes(source))) {
+    const social = document.getElementById('social-link');
+    social.href = 'https://instagram.com/joshfisidi';
+    social.textContent = 'IG';
+  }
+
   const galleryViewport = matchMedia('(min-width: 1200px) and (min-height: 650px), (max-width: 767px), (max-width: 950px) and (pointer: coarse)');
   const loadGallery = () => { if (galleryViewport.matches) import('/gallery.js?v=4'); };
   if (document.readyState === 'complete') loadGallery();
