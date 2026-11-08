@@ -1,6 +1,7 @@
 const gallery = document.querySelector('.portrait-gallery');
 const frame = gallery.querySelector('.portrait-frame');
 const wide = matchMedia('(min-width: 1200px) and (min-height: 650px)');
+const mobile = matchMedia('(max-width: 767px), (max-width: 950px) and (pointer: coarse)');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const portraits = [
   ['portraits-v1/04', 'Seated studio portrait of Josh'],
@@ -29,7 +30,7 @@ let timer;
 let prefetchTimer;
 let revision = 0;
 let pending;
-const visible = () => wide.matches && !document.hidden;
+const visible = () => (wide.matches || mobile.matches) && !document.hidden;
 const wrap = (i) => (i + portraits.length) % portraits.length;
 
 function load(i) {
@@ -81,10 +82,10 @@ function reveal(image) {
   }
   outgoing.setAttribute('aria-hidden', 'true');
   frame.append(incoming);
-  dissolveFrames ??= ditherFrames();
   const timing = { duration: 840, fill: 'both' };
-  const exit = outgoing.animate(dissolveFrames.map(step => step.exit), timing);
-  const enter = incoming.animate(dissolveFrames.map(step => step.enter), timing);
+  if (!mobile.matches) dissolveFrames ??= ditherFrames();
+  const exit = outgoing.animate(mobile.matches ? { opacity: [1, 0] } : dissolveFrames.map(step => step.exit), timing);
+  const enter = incoming.animate(mobile.matches ? { opacity: [0, 1] } : dissolveFrames.map(step => step.enter), timing);
   enter.finished.then(() => {
     outgoing.remove();
     enter.cancel();
@@ -115,5 +116,6 @@ function sync() {
 
 motion.addEventListener('change', sync);
 wide.addEventListener('change', sync);
+mobile.addEventListener('change', sync);
 document.addEventListener('visibilitychange', sync);
 sync();
