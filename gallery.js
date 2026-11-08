@@ -1,41 +1,46 @@
 const gallery = document.querySelector('.portrait-gallery');
 const frame = gallery.querySelector('.portrait-frame');
-const controls = gallery.querySelector('.portrait-controls');
-const count = gallery.querySelector('.portrait-count');
-const play = gallery.querySelector('.portrait-play');
 const wide = matchMedia('(min-width: 1200px) and (min-height: 650px)');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const portraits = [
-  [4, 'Seated studio portrait of Josh'],
-  [8, 'Josh in a red jacket under warm light'],
-  [1, 'Josh in a black coat by a doorway', '75% center'],
-  [2, 'Josh outside in the snow'],
-  [3, 'Josh reflected in a storefront window'],
-  [5, 'Josh resting his head on his hand'],
-  [6, 'Josh wearing round sunglasses'],
-  [7, 'Josh seated in his music studio'],
-  [9, 'Josh in orange sunglasses beside a teddy bear'],
-  [10, 'Josh in a light coat'],
+  ['portraits-v1/04', 'Seated studio portrait of Josh'],
+  ['portraits-v2/08', 'Josh in red light wearing headphones', '38% center'],
+  ['portraits-v1/08', 'Josh in a red jacket under warm light'],
+  ['portraits-v1/01', 'Josh in a black coat by a doorway', '75% center'],
+  ['portraits-v1/02', 'Josh outside in the snow'],
+  ['portraits-v1/03', 'Josh reflected in a storefront window'],
+  ['portraits-v1/05', 'Josh resting his head on his hand'],
+  ['portraits-v1/06', 'Josh wearing round sunglasses'],
+  ['portraits-v1/07', 'Josh seated in his music studio'],
+  ['portraits-v1/09', 'Josh in orange sunglasses beside a teddy bear'],
+  ['portraits-v1/10', 'Josh in a light coat'],
+  ['portraits-v2/01', 'Close portrait with red sketch lines'],
+  ['portraits-v2/02', 'Josh in a black hoodie'],
+  ['portraits-v2/03', 'Josh wearing headphones under cool light'],
+  ['portraits-v2/04', 'Side portrait with green headphones'],
+  ['portraits-v2/05', 'Josh in a pink shirt beside a guitar', '34% center'],
+  ['portraits-v2/06', 'Josh holding the edge of his hood', '42% center'],
+  ['portraits-v2/07', 'Elevator mirror portrait in a yellow sweater', '34% center'],
+  ['portraits-v2/09', 'Josh in a dark coat with a pendant'],
+  ['portraits-v2/10', 'An older photograph with a yellow and black shirt'],
 ];
 let index = 0;
-let playing = !motion.matches && !navigator.connection?.saveData;
 let timer;
 let prefetchTimer;
 let revision = 0;
 let pending;
 const visible = () => wide.matches && !document.hidden;
 const wrap = (i) => (i + portraits.length) % portraits.length;
-const format = (n) => String(n).padStart(2, '0');
 
 function load(i) {
   if (pending?.index === i) return pending.image;
-  const [number, alt, position] = portraits[i];
+  const [path, alt, position] = portraits[i];
   const image = new Image();
   image.alt = alt;
   image.decoding = 'async';
   image.fetchPriority = 'low';
   if (position) image.style.objectPosition = position;
-  image.src = `${gallery.dataset.source}/${format(number)}.webp`;
+  image.src = `${gallery.dataset.source}/${path}.webp`;
   pending = { index: i, image: image.decode().then(() => image, () => null) };
   return pending.image;
 }
@@ -43,11 +48,48 @@ function load(i) {
 function schedule() {
   clearTimeout(timer);
   clearTimeout(prefetchTimer);
-  play.textContent = playing ? 'Pause' : 'Play';
-  if (!visible() || !playing) return;
+  if (!visible() || motion.matches || navigator.connection?.saveData) return;
   const next = wrap(index + 1);
   prefetchTimer = setTimeout(() => { if (visible()) load(next); }, 4800);
   timer = setTimeout(() => show(next), 6500);
+}
+
+// The two complementary masks transfer one cell at a time across a repeating tile.
+const thresholds = [0, 12, 3, 15, 8, 4, 11, 7, 2, 14, 1, 13, 10, 6, 9, 5];
+let dissolveFrames;
+function ditherFrames() {
+  return Array.from({ length: 17 }, (_, level) => {
+    const mask = (incoming) => {
+      const cells = thresholds.map((threshold, i) => (threshold < level) === incoming
+        ? `<rect x="${i % 4}" y="${Math.floor(i / 4)}" width="1" height="1"/>`
+        : '').join('');
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4" shape-rendering="crispEdges">${cells}</svg>`;
+      return { maskImage: `url("data:image/svg+xml,${encodeURIComponent(svg)}")`, easing: 'steps(1, end)' };
+    };
+    return { enter: mask(true), exit: mask(false) };
+  });
+}
+
+function reveal(image) {
+  const outgoing = frame.firstElementChild;
+  const incoming = document.createElement('div');
+  incoming.className = 'portrait-layer';
+  incoming.append(image);
+  if (!outgoing || motion.matches) {
+    frame.replaceChildren(incoming);
+    return;
+  }
+  outgoing.setAttribute('aria-hidden', 'true');
+  frame.append(incoming);
+  dissolveFrames ??= ditherFrames();
+  const timing = { duration: 840, fill: 'both' };
+  const exit = outgoing.animate(dissolveFrames.map(step => step.exit), timing);
+  const enter = incoming.animate(dissolveFrames.map(step => step.enter), timing);
+  enter.finished.then(() => {
+    outgoing.remove();
+    enter.cancel();
+    exit.cancel();
+  });
 }
 
 async function show(next) {
@@ -59,8 +101,7 @@ async function show(next) {
   const image = await load(next);
   if (ticket !== revision || !visible()) return;
   if (image) {
-    frame.replaceChildren(image);
-    count.textContent = `${format(next + 1)} / ${portraits.length}`;
+    reveal(image);
   } else {
     pending = null;
   }
@@ -72,12 +113,7 @@ function sync() {
   else schedule();
 }
 
-controls.querySelectorAll('[data-step]').forEach(button => {
-  button.addEventListener('click', () => show(wrap(index + Number(button.dataset.step))));
-});
-play.addEventListener('click', () => { playing = !playing; schedule(); });
-motion.addEventListener('change', () => { if (motion.matches) playing = false; schedule(); });
+motion.addEventListener('change', sync);
 wide.addEventListener('change', sync);
 document.addEventListener('visibilitychange', sync);
-controls.hidden = false;
 sync();

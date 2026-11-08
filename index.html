@@ -164,14 +164,7 @@ a:focus-visible { outline: 2px solid var(--b); outline-offset: 6px; border-radiu
     object-fit: cover;
     mask-image: radial-gradient(ellipse 69% 68% at center, black 52%, #000a 71%, transparent 100%);
   }
-  .portrait-controls { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 8px; }
-  .portrait-controls button {
-    min-width: 44px; min-height: 44px;
-    border: 0; background: transparent; color: var(--ink); cursor: pointer;
-    font: 400 12px var(--mono);
-  }
-  .portrait-controls button:focus-visible { outline: 2px solid var(--b); }
-  .portrait-count { color: var(--ink-dim); font: 400 11px var(--mono); }
+  .portrait-layer { position: absolute; inset: 0; mask-size: 16px 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
   #field, .portal-link { transition: none; }
@@ -186,14 +179,8 @@ a:focus-visible { outline: 2px solid var(--b); outline-offset: 6px; border-radiu
 
 <main class="stage">
   <div class="portal-shell">
-  <section class="portrait-gallery" aria-label="Portrait slideshow" data-source="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/joshfisidi/portraits-v1">
+  <section class="portrait-gallery" aria-label="Portrait slideshow" data-source="https://cufummffmtitwhfisrlw.supabase.co/storage/v1/object/public/joshfisidi">
     <div class="portrait-halo"><div class="portrait-frame"></div></div>
-    <div class="portrait-controls" hidden>
-      <button type="button" data-step="-1" aria-label="Previous photo">←</button>
-      <span class="portrait-count">01 / 10</span>
-      <button type="button" data-step="1" aria-label="Next photo">→</button>
-      <button type="button" class="portrait-play">Pause</button>
-    </div>
   </section>
   <nav id="portal" aria-label="Explore">
     <ul class="portal-list">
@@ -221,7 +208,7 @@ a:focus-visible { outline: 2px solid var(--b); outline-offset: 6px; border-radiu
 
 <script type="module">
   const wide = matchMedia('(min-width: 1200px) and (min-height: 650px)');
-  const loadGallery = () => { if (wide.matches) import('/gallery.js?v=1'); };
+  const loadGallery = () => { if (wide.matches) import('/gallery.js?v=2'); };
   if (document.readyState === 'complete') loadGallery();
   else window.addEventListener('load', loadGallery, { once: true });
   wide.addEventListener('change', loadGallery);
