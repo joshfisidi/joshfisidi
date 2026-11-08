@@ -238,7 +238,7 @@ a:focus-visible { outline: 2px solid var(--b); outline-offset: 6px; border-radiu
 
 <script type="module">
   const galleryViewport = matchMedia('(min-width: 1200px) and (min-height: 650px), (max-width: 767px), (max-width: 950px) and (pointer: coarse)');
-  const loadGallery = () => { if (galleryViewport.matches) import('/gallery.js?v=3'); };
+  const loadGallery = () => { if (galleryViewport.matches) import('/gallery.js?v=4'); };
   if (document.readyState === 'complete') loadGallery();
   else window.addEventListener('load', loadGallery, { once: true });
   galleryViewport.addEventListener('change', loadGallery);

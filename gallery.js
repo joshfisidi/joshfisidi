@@ -3,10 +3,11 @@ const frame = gallery.querySelector('.portrait-frame');
 const wide = matchMedia('(min-width: 1200px) and (min-height: 650px)');
 const mobile = matchMedia('(max-width: 767px), (max-width: 950px) and (pointer: coarse)');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
+const mobilePortrait = ['portraits-v1/08', 'Josh in sunglasses and a red jacket under warm light'];
 const portraits = [
   ['portraits-v1/04', 'Seated studio portrait of Josh'],
   ['portraits-v2/08', 'Josh in red light wearing headphones', '38% center'],
-  ['portraits-v1/08', 'Josh in a red jacket under warm light'],
+  mobilePortrait,
   ['portraits-v1/01', 'Josh in a black coat by a doorway', '75% center'],
   ['portraits-v1/02', 'Josh outside in the snow'],
   ['portraits-v1/03', 'Josh reflected in a storefront window'],
@@ -26,6 +27,7 @@ const portraits = [
   ['portraits-v2/10', 'An older photograph with a yellow and black shirt'],
 ];
 let index = 0;
+let mobileMode;
 let timer;
 let prefetchTimer;
 let revision = 0;
@@ -49,7 +51,7 @@ function load(i) {
 function schedule() {
   clearTimeout(timer);
   clearTimeout(prefetchTimer);
-  if (!visible() || motion.matches || navigator.connection?.saveData) return;
+  if (!visible() || mobile.matches || motion.matches || navigator.connection?.saveData) return;
   const next = wrap(index + 1);
   prefetchTimer = setTimeout(() => { if (visible()) load(next); }, 4800);
   timer = setTimeout(() => show(next), 6500);
@@ -76,16 +78,16 @@ function reveal(image) {
   const incoming = document.createElement('div');
   incoming.className = 'portrait-layer';
   incoming.append(image);
-  if (!outgoing || motion.matches) {
+  if (!outgoing || mobile.matches || motion.matches) {
     frame.replaceChildren(incoming);
     return;
   }
   outgoing.setAttribute('aria-hidden', 'true');
   frame.append(incoming);
   const timing = { duration: 840, fill: 'both' };
-  if (!mobile.matches) dissolveFrames ??= ditherFrames();
-  const exit = outgoing.animate(mobile.matches ? { opacity: [1, 0] } : dissolveFrames.map(step => step.exit), timing);
-  const enter = incoming.animate(mobile.matches ? { opacity: [0, 1] } : dissolveFrames.map(step => step.enter), timing);
+  dissolveFrames ??= ditherFrames();
+  const exit = outgoing.animate(dissolveFrames.map(step => step.exit), timing);
+  const enter = incoming.animate(dissolveFrames.map(step => step.enter), timing);
   enter.finished.then(() => {
     outgoing.remove();
     enter.cancel();
@@ -110,8 +112,12 @@ async function show(next) {
 }
 
 function sync() {
-  if (visible() && !frame.firstChild) show(index);
-  else schedule();
+  if (visible() && (mobileMode !== mobile.matches || !frame.firstChild)) {
+    mobileMode = mobile.matches;
+    show(mobileMode ? portraits.indexOf(mobilePortrait) : 0);
+    return;
+  }
+  schedule();
 }
 
 motion.addEventListener('change', sync);
