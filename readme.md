@@ -5,6 +5,10 @@
 </p>
 
 <p>
+I build apps and study epigenetics. I'm interested in the intersection of technology, biology, artificial intelligence, and human potential. I spend most of my time engineering systems, exploring unconventional ideas, making music, and trying to understand how things work at a fundamental level. I believe in questioning assumptions, building independently, and turning curiosity into something tangible.
+</p>
+
+<p>
   <a href="https://github.com/joshfisidi">
     <img src="https://streak-stats.demolab.com?user=joshfisidi&theme=dark&hide_border=true" />
   </a>
